@@ -26,15 +26,18 @@ do
 done
 
 
+if [ -f "*.tar.gz" ]; then
+    echo "mv -n *.tar.gz ${TARGET}"
+    mv -n *.tar.gz ${TARGET}
+fi
 
-mv -n *.tar.gz ${TARGET}
 
 cd ${TARGET}
 
 
 for i in {0..9..1}
 do
-    for file in `find . -type f -name "${i}*.tar.gz"`
+    for file in `find . -maxdepth 1 -type f -name "${i}*.tar.gz"`
     do
         echo "mv -n ${file} ${i}/"
         mv -n ${file} ${i}/
@@ -44,13 +47,13 @@ done
 
 for i in {a..z}
 do
-    for file in `find . -type f -name "${i}*.tar.gz"`
+    for file in `find . -maxdepth 1 -type f -name "${i}*.tar.gz"`
     do
         echo "mv -n ${file} ${i}/"
         mv -n ${file} ${i}/
     done
 
-    for file in `find . -type f -name "${i^^}*.tar.gz"`
+    for file in `find . -maxdepth 1 -type f -name "${i^^}*.tar.gz"`
     do
         echo "mv -n ${file} ${i}/"
         mv -n ${file} ${i}/
