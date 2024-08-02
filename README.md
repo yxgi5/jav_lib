@@ -36,12 +36,12 @@ av.list被自动更新
 
 保存为 tar.gz 格式，mv除去另外处理
 ```
-av_mv.sh
+./av_mv.sh
 ```
 
 
 ## 错误处理
-如果中间有啥问题，停止并且使用`unpack.sh`
+如果中间有啥问题，停止并且使用`./unpack.sh`
 
 
 
@@ -49,19 +49,19 @@ av_mv.sh
 
 查看已经存档的车牌数据库
 ```
-generate_db_from_list.sh
+./generate_db_from_list.sh
 ```
 
 ## 车牌catalog数据库
 
 导入已存档车牌catalog的sqlite3格式db数据库
 ```
-import_catalog_db.sh
+./import_catalog_db.sh
 ```
 
 更新已存档车牌catalog之后导出为文本
 ```
-export_catalog_db.sh
+./export_catalog_db.sh
 ```
 
 
