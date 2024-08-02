@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
+import subprocess
+import codecs
+import sys
+
 import urllib.request
 import requests
 import re
@@ -35,6 +40,16 @@ def getAjax(avid):
     urllib.request.install_opener(opener)
     soup = BeautifulSoup(urllib.request.urlopen(url).read().decode('utf-8'), 'lxml')
     html=soup.prettify()
+    print(html)
+    # save_path = os.path.expanduser('~/Downloads/')
+    save_path = os.getcwd()
+    title=soup.find("title").text
+    title=title[0:75]
+    file_name = title + '.html'
+    # print(file_name)
+    complete_name = os.path.join(save_path, file_name)
+    file_object = codecs.open(complete_name, "w", "utf-8")
+    file_object.write(html)
 
     '''获取img'''
     img_pattern = re.compile(r"var img = '.*?'")
@@ -92,6 +107,14 @@ def javbus(avid):
     urllib.request.install_opener(opener)
     soup = BeautifulSoup(urllib.request.urlopen(url).read().decode('utf-8'), 'lxml')
 
+    html=soup.prettify()
+    title='ajax'
+    save_path = os.getcwd()
+    file_name = title + '.html'
+    complete_name = os.path.join(save_path, file_name)
+    file_object = codecs.open(complete_name, "w", "utf-8")
+    file_object.write(html)
+
     avdist={'title':'','magnet':'','size':'','date':''}
 
     for tr in soup.find_all('tr'):
@@ -109,7 +132,7 @@ def javbus(avid):
                 avdist['date'] = td.a.text.replace(" ", "").replace("\t", "").replace("\r\n","")
         print(avdist)
 
-url="https://www.javbus.com/ja/HMRK-016"
+url="https://www.javbus.com/ja/BNST-036"
 #有些网站会现在，但可伪装浏览器爬取 浏览器User-Agent的详细信息(可采用下面的进行爬虫伪装) 
 #浏览器头信息代理可以直接搜Http Header之User-Agent，以下是谷歌浏览器的
 headers = {
@@ -155,6 +178,6 @@ if __name__ == '__main__':
     # url=getAjax('HMRK-016')
     # print(url)
 # 
-    javbus('HMRK-016')
+    javbus('BNST-036')
 
     # use_requests(url,headers)
