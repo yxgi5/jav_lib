@@ -61,12 +61,15 @@ def getAjax(avid):
     # file_object = codecs.open(complete_name, "w", "utf-8")
     # file_object.write(html)
 
+    file_object = codecs.open(avid + ".txt", "w", "utf-8")
     '''获取img'''
     img_pattern = re.compile(r"var img = '.*?'")
     match = img_pattern.findall(html)
     img=match[0].replace("var img = '","https://www.javbus.com/").replace("'","")
     print('封面为:',img)
-
+    file_object.write(img + '\n')
+    file_object.close()
+    file_object = codecs.open(avid + ".txt", "a", "utf-8")
     img_pattern = re.compile(r"<a class=\"sample-box\" href=\".*?\"")
     match = img_pattern.findall(html)
     image = []
@@ -75,6 +78,8 @@ def getAjax(avid):
 
     for i in range(len(image)):
         print('sample:',image[i])
+        file_object.write(image[i] + '\n')
+    file_object.close()
 
     '''获取uc'''
     uc_pattern = re.compile(r"var uc = .*?;")
@@ -133,9 +138,10 @@ def javbus(avid):
     html_global = html_global.replace("    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n", html)
     file_object = codecs.open(complete_name_globals, "w", "utf-8")
     file_object.write(html_global)
+    file_object.close()
 
+    # file_object = codecs.open(avid + "_mag.txt", "w", "utf-8")
     avdist={'title':'','magnet':'','size':'','date':''}
-
     for tr in soup.find_all('tr'):
         i=0
         for td in tr:
