@@ -73,4 +73,44 @@ av.list被自动更新
 
 
 
+# 存储整个页面的自动化
+
+## requests
+```
+conda activate python3.10
+conda install requests 
+pip install pymysql scrapy scrapy-splash scrapyd scrapyd-client -i https://mirrors.163.com/pypi/simple
+pip install bs4 -i https://mirrors.163.com/pypi/simple
+pip install -i https://mirrors.163.com/pypi/simple pyautogui selenium webdriver-manager
+```
+
+## 下面试验性的写了几个脚本
+
+由于需要爬取的网页是Ajax动态渲染，所以需要用Selenium启动一个真实的浏览器环境，然后通过这个环境来获取动态加载的内容
+```
+save_page_tools/webdriver_save_page.py
+```
+缺陷: 目前还不能
+```
+检测是否 No Page
+已经在的覆盖策略有待改善
+网络不佳加载未完成的情况处理
+写入磁盘慢的情况处理
+```
+没有精力做了。用的时候做个循环传参数基本上也能省一些力。
+
+save_page_tools这里面放了一个更新的查询sample图片链接和magnet链接的python工具
+```
+save_page_tools/query_magnet_sample-img.py
+```
+想法:
+```
+BeautifulSoup不完全靠谱有时候会失败，可能需要加大超时限制
+后续这个加上ari2c/curl什么的就直接替代之前bash脚本的实现，遗憾的是存 page 还是有缺少。
+如果仅用 webdriver 保存出 page only，再改进这个脚本，把 sample image 和 magnet link 都存下来，基本也和 save page all等效，去掉了不需要的零碎
+再进一步的想法，其实不需要用 webdriver，只差 magnet link 而已，查询到 magnet link 再按合理的格式写到 page 里面，不就可以了？还可以把图片的链接都搞成本地，也不需要目录了
+```
+
+
+
 
