@@ -49,7 +49,8 @@ def getAjax(avid):
         # except Exception as ret:
         #     raise Exception(ret)
         #     # print(ret)
-        except IncompleteRead:
+        # except IncompleteRead:
+        except Exception:
             if i == 4:
                raise       # give up after 5 attempts
 
@@ -91,7 +92,8 @@ def getAjax(avid):
         # except BaseException as ret:
         #     print(ret)
         #     # print('错误，当前图片无法下载')
-        except IncompleteRead:
+        # except IncompleteRead:
+        except Exception:
             if i == 4:
                raise       # give up after 5 attempts
         else:
