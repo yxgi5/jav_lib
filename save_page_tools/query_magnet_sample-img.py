@@ -265,7 +265,11 @@ if __name__ == '__main__':
     # url=getAjax('HMRK-016')
     # print(url)
 # 
-    javbus('BNST-036')
+    # javbus('BNST-036')
     # javbus('HHHA-001') # test HTTP Error 404: Not Found
+
+    # print(sys.argv[1])
+    javbus(sys.argv[1])
+    pass
 
     # use_requests(url,headers)
