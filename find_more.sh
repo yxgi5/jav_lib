@@ -67,7 +67,7 @@ source ./av.sh
 
 for line in $(cat input.list)
 do
-    if [[ `sqlite3 av.db "select * from files where files like '%$i%'"` == "" ]]; then
+    if [[ `sqlite3 av.db "select * from files where files like '%$line%'"` == "" ]]; then
         todo_list+=($line)
         echo $line not in db
     else

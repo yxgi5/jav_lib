@@ -6,7 +6,7 @@ import subprocess
 import codecs
 import sys
 import tarfile
-
+from http.client import IncompleteRead
 import urllib.request
 import requests
 import re
@@ -42,11 +42,15 @@ def getAjax(avid):
         ('Referer',url)
     ]
     urllib.request.install_opener(opener)
-    try:
-        soup = BeautifulSoup(urllib.request.urlopen(url, timeout=1000).read().decode('utf-8'), 'lxml')
-    except Exception as ret:
-        raise Exception(ret)
-        # print(ret)
+    for i in range(5):
+        try:
+            soup = BeautifulSoup(urllib.request.urlopen(url, timeout=1000).read().decode('utf-8'), 'lxml')
+        # except Exception as ret:
+        #     raise Exception(ret)
+        #     # print(ret)
+        except IncompleteRead:
+            if i == 4:
+               raise       # give up after 5 attempts
 
     try:
         os.mkdir(avid)
