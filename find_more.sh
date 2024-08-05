@@ -79,8 +79,8 @@ if [ -e input.list ]
     then rm input.list
 fi
 touch input.list
-#for i in ${todo[@]}; do echo $i; echo "<https://www.javbus.com/ja/$i>">>more_link.md; done
-for i in ${todo[@]}; do echo $i; echo $i>>input.list; done
+#for i in ${todo_list[@]}; do echo $i; echo "<https://www.javbus.com/ja/$i>">>more_link.md; done
+for i in ${todo_list[@]}; do echo $i; echo $i>>input.list; done
 sed -i 'N;s/^\n//g' input.list
 sed -i 's/$/\n/g' input.list
 
