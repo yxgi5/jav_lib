@@ -55,7 +55,7 @@ def getAjax(avid):
 
     html = soup.prettify()
     html = html.replace("<div id=\"movie-loading\">","<div id=\"movie-loading\" style=\"display: none;\">")
-    print(html)
+    # print(html)
     # save_path = os.path.expanduser('~/Downloads/')
     save_path = os.getcwd()
     title=soup.find("title").text
@@ -77,7 +77,7 @@ def getAjax(avid):
     img_pattern = re.compile(r"var img = '.*?'")
     match = img_pattern.findall(html)
     img=match[0].replace("var img = '","https://www.javbus.com").replace("'","")
-    print('封面为:',img)
+    # print('封面为:',img)
     try:
         # pic = requests.get(img,timeout=7)
         pic = urllib.request.urlopen(img, timeout=1000).read()
@@ -106,7 +106,7 @@ def getAjax(avid):
         image.append(match[i].replace("<a class=\"sample-box\" href=\"","").replace("\"",""))
 
     for i in range(len(image)):
-        print('sample:',image[i])
+        # print('sample:',image[i])
         # try:
         #     pic = urllib.request.urlopen(image[i], timeout=1000).read()
         # except BaseException as ret:
@@ -224,7 +224,7 @@ def javbus(avid):
                 avdist['size'] = td.a.text.replace(" ", "").replace("\t", "").replace("\r\n","")
             if (i%3 == 0):
                 avdist['date'] = td.a.text.replace(" ", "").replace("\t", "").replace("\r\n","")
-        print(avdist)
+        # print(avdist)
 
     os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt" + ' | tee ' + avid + '/' + avid + '_tee.log' )
     with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
