@@ -86,7 +86,7 @@ def getAjax(avid):
     for i in range(5):
         try:
             # pic = requests.get(img,timeout=7)
-            pic = urllib.request.urlopen(img, timeout=1000).read()
+            pic = urllib.request.urlopen(img).read()
             break
         # except BaseException as ret:
         #     print(ret)
