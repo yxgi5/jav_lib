@@ -69,6 +69,9 @@ for line in $(cat input.list)
 do
     if [[ `sqlite3 av.db "select * from files where files like '%$i%'"` == "" ]]; then
         todo_list+=($line)
+        echo $line not in db
+    else
+        echo $line exits in db
     fi
 done
 
