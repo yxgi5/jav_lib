@@ -29,7 +29,7 @@ list=$(cat input.list)
 for i in $list
 do
 if [[ `sqlite3 av.db "select * from files where files like '%$i%'"` == "" ]]; then
-    echo $i
+    echo $i new
     todo+=($i)
 fi
 done
@@ -42,7 +42,7 @@ sed -i 'N;s/^\n//g' input.list
 
 for line in $(cat input.list)
 do
-    # echo $line
+    echo downloading $line
     python3.8 save_page_tool.py $line
 done
 
@@ -68,7 +68,7 @@ source ./av.sh
 for line in $(cat input.list)
 do
     if [[ `sqlite3 av.db "select * from files where files like '%$i%'"` == "" ]]; then
-        todo_list+=($i)
+        todo_list+=($line)
     fi
 done
 
