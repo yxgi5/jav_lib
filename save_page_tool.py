@@ -43,7 +43,7 @@ def getAjax(avid):
     ]
     urllib.request.install_opener(opener)
     try:
-        soup = BeautifulSoup(urllib.request.urlopen(url).read().decode('utf-8'), 'lxml')
+        soup = BeautifulSoup(urllib.request.urlopen(url, timeout=1000).read().decode('utf-8'), 'lxml')
     except Exception as ret:
         raise Exception(ret)
         # print(ret)
