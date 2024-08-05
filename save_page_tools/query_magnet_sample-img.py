@@ -41,7 +41,12 @@ def getAjax(avid):
         ('Referer',url)
     ]
     urllib.request.install_opener(opener)
-    soup = BeautifulSoup(urllib.request.urlopen(url).read().decode('utf-8'), 'lxml')
+    try:
+        soup = BeautifulSoup(urllib.request.urlopen(url).read().decode('utf-8'), 'lxml')
+    except Exception as ret:
+        raise Exception(ret)
+        # print(ret)
+
     html = soup.prettify()
     html = html.replace("<div id=\"movie-loading\">","<div id=\"movie-loading\" style=\"display: none;\">")
     print(html)
@@ -61,15 +66,28 @@ def getAjax(avid):
     # file_object = codecs.open(complete_name, "w", "utf-8")
     # file_object.write(html)
 
-    file_object = codecs.open(avid + ".txt", "w", "utf-8")
+    # file_object = codecs.open(avid + ".txt", "w", "utf-8")
     '''获取img'''
     img_pattern = re.compile(r"var img = '.*?'")
     match = img_pattern.findall(html)
-    img=match[0].replace("var img = '","https://www.javbus.com/").replace("'","")
+    img=match[0].replace("var img = '","https://www.javbus.com").replace("'","")
     print('封面为:',img)
-    file_object.write(img + '\n')
-    file_object.close()
-    file_object = codecs.open(avid + ".txt", "a", "utf-8")
+    try:
+        # pic = requests.get(img,timeout=7)
+        pic = urllib.request.urlopen(img, timeout=7).read()
+    except BaseException:
+        print('错误，当前图片无法下载')
+    else:
+        if len(pic) > 200:
+            pic_name = os.path.basename(img)
+            fp = open(pic_name, 'wb')
+            fp.write(pic)
+            fp.close()
+
+    # os.system("aria2c -j 10 -x 2 --all-proxy='http://127.0.0.1:8118' "+ img)
+    # file_object.write(img + '\n')
+    # file_object.close()
+    # file_object = codecs.open(avid + ".txt", "a", "utf-8")
     img_pattern = re.compile(r"<a class=\"sample-box\" href=\".*?\"")
     match = img_pattern.findall(html)
     image = []
@@ -78,8 +96,18 @@ def getAjax(avid):
 
     for i in range(len(image)):
         print('sample:',image[i])
-        file_object.write(image[i] + '\n')
-    file_object.close()
+        try:
+            pic = urllib.request.urlopen(image[i], timeout=7).read()
+        except BaseException:
+            print('错误，当前图片无法下载')
+        else:
+            if len(pic) > 200:
+                pic_name = os.path.basename(image[i])
+                fp = open(pic_name, 'wb')
+                fp.write(pic)
+                fp.close()
+        # file_object.write(image[i] + '\n')
+    # file_object.close()
 
     '''获取uc'''
     uc_pattern = re.compile(r"var uc = .*?;")
@@ -97,8 +125,13 @@ def getAjax(avid):
 
 def javbus(avid):
     '''获取javbus的磁力链接'''
+    try:
+        url=getAjax(avid)
+    except Exception as ret:
+        # raise Exception(ret)
+        print(ret)
+        return
 
-    url=getAjax(avid)
     proxy = urllib.request.ProxyHandler({'https': proxy_addr})
     opener = urllib.request.build_opener(proxy, urllib.request.HTTPHandler)
     opener.addheaders = [
@@ -157,6 +190,10 @@ def javbus(avid):
                 avdist['date'] = td.a.text.replace(" ", "").replace("\t", "").replace("\r\n","")
         print(avdist)
 
+    # os.system('aria2c -j 10 -x 2 -i ' + avid + ".txt")
+    pass
+
+
 # url="https://www.javbus.com/ja/BNST-036"
 # #有些网站会现在，但可伪装浏览器爬取 浏览器User-Agent的详细信息(可采用下面的进行爬虫伪装) 
 # #浏览器头信息代理可以直接搜Http Header之User-Agent，以下是谷歌浏览器的
@@ -204,5 +241,6 @@ if __name__ == '__main__':
     # print(url)
 # 
     javbus('BNST-036')
+    # javbus('HHHA-001') # test HTTP Error 404: Not Found
 
     # use_requests(url,headers)
