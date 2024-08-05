@@ -183,13 +183,25 @@ def javbus(avid):
     html = html + "    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n"
     global html_global
     global complete_name_globals
-    html_global = html_global.replace("    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n", html)
-    # file_object = codecs.open(avid + '/' + os.path.basename(complete_name_globals), "w", "utf-8")
-    file_object = codecs.open(complete_name_globals, "w", "utf-8")
-    file_object.write(html_global)
+    
+    pattern = re.compile(r"<a class=\"movie-box\" href=\"https://www.javbus.com/ja/.*?\"")
+    match = pattern.findall(html_global)
+
+    file_object = codecs.open("todo.list", "a", "utf-8")
+    linsk = []
+    for i in range(len(match)):
+        linsk.append(match[i].replace("<a class=\"movie-box\" href=\"https://www.javbus.com/ja/","").replace("\"",""))
+    for i in range(len(linsk)):
+        file_object.write(linsk[i] + '\n')
     file_object.close()
 
-    # with tarfile.open(avid + '.tar', 'a') as tar:
+    html_global = html_global.replace("    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n", html)
+    file_object = codecs.open(avid + '/' + os.path.basename(complete_name_globals), "w", "utf-8")
+    # file_object = codecs.open(complete_name_globals, "w", "utf-8")
+    file_object.write(html_global)
+    file_object.close()
+ 
+     # with tarfile.open(avid + '.tar', 'a') as tar:
     #     tar.add(os.path.basename(complete_name_globals))
     #     os.remove(complete_name_globals)
 
@@ -215,9 +227,9 @@ def javbus(avid):
         print(avdist)
 
     os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt" + ' | tee ' + avid + '/' + avid + '_tee.log' )
-    # with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
-    #    tar.add(avid)
-    #    os.system('rm -rf '+ avid)
+    with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
+       tar.add(avid)
+       os.system('rm -rf '+ avid)
     pass
 
 
@@ -267,11 +279,11 @@ if __name__ == '__main__':
     # url=getAjax('HMRK-016')
     # print(url)
 # 
-    # javbus('BNST-036')
+    javbus('BNST-036')
     # javbus('HHHA-001') # test HTTP Error 404: Not Found
 
     # print(sys.argv[1])
-    javbus(sys.argv[1])
+    # javbus(sys.argv[1])
     pass
 
     # use_requests(url,headers)
