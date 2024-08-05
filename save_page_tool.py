@@ -48,6 +48,11 @@ def getAjax(avid):
         raise Exception(ret)
         # print(ret)
 
+    try:
+        os.mkdir(avid)
+    except FileExistsError:
+        pass
+
     html = soup.prettify()
     html = html.replace("<div id=\"movie-loading\">","<div id=\"movie-loading\" style=\"display: none;\">")
     print(html)
@@ -82,10 +87,6 @@ def getAjax(avid):
     else:
         if len(pic) > 200:
             pic_name = os.path.basename(img)
-            try:
-                os.mkdir(avid)
-            except FileExistsError:
-                pass    
             fp = open(avid+'/'+pic_name, 'wb')
             fp.write(pic)
             fp.close()
@@ -183,7 +184,8 @@ def javbus(avid):
     global html_global
     global complete_name_globals
     html_global = html_global.replace("    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n", html)
-    file_object = codecs.open(avid + '/' + os.path.basename(complete_name_globals), "w", "utf-8")
+    # file_object = codecs.open(avid + '/' + os.path.basename(complete_name_globals), "w", "utf-8")
+    file_object = codecs.open(complete_name_globals, "w", "utf-8")
     file_object.write(html_global)
     file_object.close()
 
@@ -213,9 +215,9 @@ def javbus(avid):
         print(avdist)
 
     os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt" + ' | tee ' + avid + '/' + avid + '_tee.log' )
-    with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
-        tar.add(avid)
-        os.system('rm -rf '+ avid)
+    # with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
+    #    tar.add(avid)
+    #    os.system('rm -rf '+ avid)
     pass
 
 
