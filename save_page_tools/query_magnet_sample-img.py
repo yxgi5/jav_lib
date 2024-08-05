@@ -75,23 +75,29 @@ def getAjax(avid):
     print('封面为:',img)
     try:
         # pic = requests.get(img,timeout=7)
-        pic = urllib.request.urlopen(img, timeout=7).read()
-    except BaseException:
-        print('错误，当前图片无法下载')
+        pic = urllib.request.urlopen(img, timeout=1000).read()
+    except BaseException as ret:
+        print(ret)
+        # print('错误，当前图片无法下载')
     else:
         if len(pic) > 200:
             pic_name = os.path.basename(img)
-            fp = open(pic_name, 'wb')
+            try:
+                os.mkdir(avid)
+            except FileExistsError:
+                pass    
+            fp = open(avid+'/'+pic_name, 'wb')
             fp.write(pic)
             fp.close()
-            with tarfile.open(avid + '.tar', 'x') as tar:
-                tar.add(pic_name)
-                os.system('rm '+ pic_name)
+            # with tarfile.open(avid + '.tar', 'x') as tar:
+            #     tar.add(pic_name)
+            #     os.system('rm '+ pic_name)
 
     # os.system("aria2c -j 10 -x 2 --all-proxy='http://127.0.0.1:8118' "+ img)
     # file_object.write(img + '\n')
     # file_object.close()
     # file_object = codecs.open(avid + ".txt", "a", "utf-8")
+    file_object = codecs.open(avid + '/' + avid + ".txt", "w", "utf-8")
     img_pattern = re.compile(r"<a class=\"sample-box\" href=\".*?\"")
     match = img_pattern.findall(html)
     image = []
@@ -100,21 +106,22 @@ def getAjax(avid):
 
     for i in range(len(image)):
         print('sample:',image[i])
-        try:
-            pic = urllib.request.urlopen(image[i], timeout=7).read()
-        except BaseException:
-            print('错误，当前图片无法下载')
-        else:
-            if len(pic) > 200:
-                pic_name = os.path.basename(image[i])
-                fp = open(pic_name, 'wb')
-                fp.write(pic)
-                fp.close()
-                with tarfile.open(avid + '.tar', 'a') as tar:
-                    tar.add(pic_name)
-                    os.system('rm '+ pic_name)
-        # file_object.write(image[i] + '\n')
-    # file_object.close()
+        # try:
+        #     pic = urllib.request.urlopen(image[i], timeout=1000).read()
+        # except BaseException as ret:
+        #     print(ret)
+        #     # print('错误，当前图片无法下载')
+        # else:
+        #     if len(pic) > 200:
+        #         pic_name = os.path.basename(image[i])
+        #         fp = open(pic_name, 'wb')
+        #         fp.write(pic)
+        #         fp.close()
+        #         with tarfile.open(avid + '.tar', 'a') as tar:
+        #             tar.add(pic_name)
+        #             os.system('rm '+ pic_name)
+        file_object.write(image[i] + '\n')
+    file_object.close()
 
     '''获取uc'''
     uc_pattern = re.compile(r"var uc = .*?;")
@@ -176,17 +183,17 @@ def javbus(avid):
     global html_global
     global complete_name_globals
     html_global = html_global.replace("    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n", html)
-    file_object = codecs.open(complete_name_globals, "w", "utf-8")
+    file_object = codecs.open(avid + '/' + os.path.basename(complete_name_globals), "w", "utf-8")
     file_object.write(html_global)
     file_object.close()
 
-    with tarfile.open(avid + '.tar', 'a') as tar:
-        tar.add(os.path.basename(complete_name_globals))
-        os.remove(complete_name_globals)
+    # with tarfile.open(avid + '.tar', 'a') as tar:
+    #     tar.add(os.path.basename(complete_name_globals))
+    #     os.remove(complete_name_globals)
 
-    with tarfile.open(avid + '.tar.gz', 'x:gz') as tar:
-        tar.add(avid + '.tar')
-        os.system('rm '+ avid + '.tar')
+    # with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
+    #     tar.add(avid + '.tar')
+    #     os.system('rm '+ avid + '.tar')
 
     # file_object = codecs.open(avid + "_mag.txt", "w", "utf-8")
     avdist={'title':'','magnet':'','size':'','date':''}
@@ -205,7 +212,10 @@ def javbus(avid):
                 avdist['date'] = td.a.text.replace(" ", "").replace("\t", "").replace("\r\n","")
         print(avdist)
 
-    # os.system('aria2c -j 10 -x 2 -i ' + avid + ".txt")
+    os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt" + ' | tee ' + avid + '/' + avid + '_tee.log' )
+    with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
+        tar.add(avid)
+        os.system('rm -rf '+ avid)
     pass
 
 
