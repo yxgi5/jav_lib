@@ -44,7 +44,8 @@ def getAjax(avid):
     urllib.request.install_opener(opener)
     for i in range(5):
         try:
-            soup = BeautifulSoup(urllib.request.urlopen(url, timeout=1000).read().decode('utf-8'), 'lxml')
+            soup = BeautifulSoup(urllib.request.urlopen(url).read().decode('utf-8'), 'lxml')
+            break
         # except Exception as ret:
         #     raise Exception(ret)
         #     # print(ret)
@@ -82,21 +83,26 @@ def getAjax(avid):
     match = img_pattern.findall(html)
     img=match[0].replace("var img = '","https://www.javbus.com").replace("'","")
     # print('封面为:',img)
-    try:
-        # pic = requests.get(img,timeout=7)
-        pic = urllib.request.urlopen(img, timeout=1000).read()
-    except BaseException as ret:
-        print(ret)
-        # print('错误，当前图片无法下载')
-    else:
-        if len(pic) > 200:
-            pic_name = os.path.basename(img)
-            fp = open(avid+'/'+pic_name, 'wb')
-            fp.write(pic)
-            fp.close()
-            # with tarfile.open(avid + '.tar', 'x') as tar:
-            #     tar.add(pic_name)
-            #     os.system('rm '+ pic_name)
+    for i in range(5):
+        try:
+            # pic = requests.get(img,timeout=7)
+            pic = urllib.request.urlopen(img, timeout=1000).read()
+            break
+        # except BaseException as ret:
+        #     print(ret)
+        #     # print('错误，当前图片无法下载')
+        except IncompleteRead:
+            if i == 4:
+               raise       # give up after 5 attempts
+        else:
+            if len(pic) > 200:
+                pic_name = os.path.basename(img)
+                fp = open(avid+'/'+pic_name, 'wb')
+                fp.write(pic)
+                fp.close()
+                # with tarfile.open(avid + '.tar', 'x') as tar:
+                #     tar.add(pic_name)
+                #     os.system('rm '+ pic_name)
 
     # os.system("aria2c -j 10 -x 2 --all-proxy='http://127.0.0.1:8118' "+ img)
     # file_object.write(img + '\n')
