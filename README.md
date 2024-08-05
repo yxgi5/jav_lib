@@ -21,6 +21,20 @@ aria2c，tetext，sqlite3，privoxy等
 ## 一般流程
 手动从`https://www.javbus.com/ja`点开有关页面，保存页面`save page all`，一般用chrome/opera浏览器。
 
+++自动下载页面并打包的脚本是
+```
+./auto_start.sh
+```
+需要先定义 input.list， 比如
+```
+CAWD-690
+CAWD-700
+CAWD-701
+CAWD-702
+```
+
+自动下载页面及封面的脚本有些情况下不能下载，还是在input.list，然后可以按手动存档流程执行，比如添加到 todo.md 。
+
 
 如果是骑兵，执行命令
 ```

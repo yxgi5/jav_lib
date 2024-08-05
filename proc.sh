@@ -13,11 +13,11 @@ IFS=$(echo -en "\n\b")
 # #mv ${folders}* $folders
 # done
 
-for folders in `find . -maxdepth 1 -type d | sed -e 's/\s.*$//' | sed -e 's/.\///' | sed -e 's/^[\.].*$//' | sed -e 's/save_page_tools//' | sed -e 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d'`
+for folders in `find . -maxdepth 1 -type d`
 do
 #echo $folders
 #echo $folders | sed -e 's/\s.*$//' | sed -e 's/.\///'
-if [ $folders != ".*" ]
+if [ $folders != "." ]
 then
     mkdir -p `echo $folders | sed -e 's/\s.*$//' | sed -e 's/.\///'`
     mv $folders `echo $folders | sed -e 's/\s.*$//' | sed -e 's/.\///'`
@@ -39,16 +39,16 @@ done
 #IFS=$(echo -en "\n\b")
 for names in `find . -type f -name "*.html" | sed -e 's/.\///'`
 do
-    #echo "donwloading for $names"
-    #cat $names | grep "https://pics.dmm.co.jp" | sed 's/\"/\n/g' | grep "https://pics.dmm.co.jp" > piclinks
-    #cat $names | grep "https://image.mgstage.com" | sed 's/\"/\n/g' | grep "https://image.mgstage.com" >> piclinks
-    #cat $names | grep "https://www.javbus.com/imgs/bigsample" | sed 's/\"/\n/g' | grep "https://www.javbus.com/imgs/bigsample" >> piclinks
-    #aria2c -j 10 -x 2 -i piclinks
-    #rm now_printing*
+    echo "donwloading for $names"
+    cat $names | grep "https://pics.dmm.co.jp" | sed 's/\"/\n/g' | grep "https://pics.dmm.co.jp" > piclinks
+    cat $names | grep "https://image.mgstage.com" | sed 's/\"/\n/g' | grep "https://image.mgstage.com" >> piclinks
+    cat $names | grep "https://www.javbus.com/imgs/bigsample" | sed 's/\"/\n/g' | grep "https://www.javbus.com/imgs/bigsample" >> piclinks
+    aria2c -j 10 -x 2 -i piclinks
+    rm now_printing*
 #    echo $names
 #    echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///' 
 #    echo "mv *.jpg `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///' `"
-    #mv *.jpg `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`
+    mv *.jpg `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`
     mv $names `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`
 #    if [ ! -d `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'` ]; then
     if [ -d `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'` ]; then
@@ -74,7 +74,7 @@ done
 
 source ./av.sh
 
-#rm piclinks
+rm piclinks
 
 #rm packup_folder_name_with_space_del.sh
 # restore $IFS
