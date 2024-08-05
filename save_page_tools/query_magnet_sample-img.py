@@ -5,6 +5,7 @@ import os
 import subprocess
 import codecs
 import sys
+import tarfile
 
 import urllib.request
 import requests
@@ -83,6 +84,9 @@ def getAjax(avid):
             fp = open(pic_name, 'wb')
             fp.write(pic)
             fp.close()
+            with tarfile.open(avid + '.tar', 'x') as tar:
+                tar.add(pic_name)
+                os.system('rm '+ pic_name)
 
     # os.system("aria2c -j 10 -x 2 --all-proxy='http://127.0.0.1:8118' "+ img)
     # file_object.write(img + '\n')
@@ -106,6 +110,9 @@ def getAjax(avid):
                 fp = open(pic_name, 'wb')
                 fp.write(pic)
                 fp.close()
+                with tarfile.open(avid + '.tar', 'a') as tar:
+                    tar.add(pic_name)
+                    os.system('rm '+ pic_name)
         # file_object.write(image[i] + '\n')
     # file_object.close()
 
@@ -172,6 +179,14 @@ def javbus(avid):
     file_object = codecs.open(complete_name_globals, "w", "utf-8")
     file_object.write(html_global)
     file_object.close()
+
+    with tarfile.open(avid + '.tar', 'a') as tar:
+        tar.add(os.path.basename(complete_name_globals))
+        os.remove(complete_name_globals)
+
+    with tarfile.open(avid + '.tar.gz', 'x:gz') as tar:
+        tar.add(avid + '.tar')
+        os.system('rm '+ avid + '.tar')
 
     # file_object = codecs.open(avid + "_mag.txt", "w", "utf-8")
     avdist={'title':'','magnet':'','size':'','date':''}
