@@ -37,13 +37,18 @@ done
 
 #SAVEIFS=$IFS
 #IFS=$(echo -en "\n\b")
-for names in `find . -type f -name "*.html" | sed -e 's/.\///'`
+for names in `find . -maxdepth 1 -type f -name "*.html" | sed -e 's/.\///'`
 do
     echo "donwloading for $names"
+	# cat $names | grep "/imgs/cover/" | sed -e "s/^.*var img = '\(.*\)'.*$/https:\/\/www.javbus.com\1/" > piclinks
     cat $names | grep "https://pics.dmm.co.jp" | sed 's/\"/\n/g' | grep "https://pics.dmm.co.jp" > piclinks
     cat $names | grep "https://image.mgstage.com" | sed 's/\"/\n/g' | grep "https://image.mgstage.com" >> piclinks
     cat $names | grep "https://www.javbus.com/imgs/bigsample" | sed 's/\"/\n/g' | grep "https://www.javbus.com/imgs/bigsample" >> piclinks
-    aria2c -j 10 -x 2 -i piclinks --header 'sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' --header 'sec-ch-ua-mobile: ?0' --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' --header 'sec-ch-ua-platform: "Linux"' --header 'Referer: https://www.javbus.com/ja/`echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`'
+	cat $names | grep "/imgs/bigsample" | sed 's/\"/\n/g' | grep -e "^/imgs/bigsample" | sed -e "s/^\(.*\)$/https:\/\/www.javbus.com\1/" >> piclinks
+	sort -u piclinks > piclinks.tmp
+	mv piclinks.tmp piclinks
+	cp piclinks `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`/`echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`.txt
+    aria2c -j 10 -x 2 -i piclinks --header 'sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' --header 'sec-ch-ua-mobile: ?0' --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' --header 'sec-ch-ua-platform: "Linux"' --header 'Referer: https://www.javbus.com/ja/`echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`' | tee `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`/`echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`_tee.log
     rm now_printing*
 #    echo $names
 #    echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///' 
