@@ -6,7 +6,7 @@ import subprocess
 import codecs
 import sys
 import tarfile
-
+from http.client import IncompleteRead
 import urllib.request
 import requests
 import re
@@ -42,11 +42,23 @@ def getAjax(avid):
         ('Referer',url)
     ]
     urllib.request.install_opener(opener)
+    for i in range(5):
+        try:
+            soup = BeautifulSoup(urllib.request.urlopen(url).read().decode('utf-8'), 'lxml')
+            break
+        # except Exception as ret:
+        #     raise Exception(ret)
+        #     # print(ret)
+        # except IncompleteRead:
+        except Exception as ret:
+            print(ret)
+            if i == 4:
+               raise       # give up after 5 attempts
+
     try:
-        soup = BeautifulSoup(urllib.request.urlopen(url).read().decode('utf-8'), 'lxml')
-    except Exception as ret:
-        raise Exception(ret)
-        # print(ret)
+        os.mkdir(avid)
+    except FileExistsError:
+        pass
 
     html = soup.prettify()
     html = html.replace("<div id=\"movie-loading\">","<div id=\"movie-loading\" style=\"display: none;\">")
@@ -73,25 +85,28 @@ def getAjax(avid):
     match = img_pattern.findall(html)
     img=match[0].replace("var img = '","https://www.javbus.com").replace("'","")
     print('封面为:',img)
-    try:
-        # pic = requests.get(img,timeout=7)
-        pic = urllib.request.urlopen(img, timeout=1000).read()
-    except BaseException as ret:
-        print(ret)
-        # print('错误，当前图片无法下载')
-    else:
-        if len(pic) > 200:
-            pic_name = os.path.basename(img)
-            try:
-                os.mkdir(avid)
-            except FileExistsError:
-                pass    
-            fp = open(avid+'/'+pic_name, 'wb')
-            fp.write(pic)
-            fp.close()
-            # with tarfile.open(avid + '.tar', 'x') as tar:
-            #     tar.add(pic_name)
-            #     os.system('rm '+ pic_name)
+    for i in range(5):
+        try:
+            # pic = requests.get(img,timeout=7)
+            pic = urllib.request.urlopen(img).read()
+            break
+        # except BaseException as ret:
+        #     print(ret)
+        #     # print('错误，当前图片无法下载')
+        # except IncompleteRead:
+        except Exception as ret:
+            print(ret)
+            if i == 4:
+               raise       # give up after 5 attempts
+
+    if len(pic) > 200:
+        pic_name = os.path.basename(img)
+        fp = open(avid+'/'+pic_name, 'wb')
+        fp.write(pic)
+        fp.close()
+        # with tarfile.open(avid + '.tar', 'x') as tar:
+        #     tar.add(pic_name)
+        #     os.system('rm '+ pic_name)
 
     # os.system("aria2c -j 10 -x 2 --all-proxy='http://127.0.0.1:8118' "+ img)
     # file_object.write(img + '\n')
@@ -102,25 +117,33 @@ def getAjax(avid):
     match = img_pattern.findall(html)
     image = []
     for i in range(len(match)):
-        image.append(match[i].replace("<a class=\"sample-box\" href=\"","").replace("\"",""))
+        image.append(match[i].replace("<a class=\"sample-box\" href=\"","").replace("\"","").replace("/imgs/bigsample/","https://www.javbus.com//imgs/bigsample/"))
 
-    for i in range(len(image)):
-        print('sample:',image[i])
-        # try:
-        #     pic = urllib.request.urlopen(image[i], timeout=1000).read()
-        # except BaseException as ret:
-        #     print(ret)
-        #     # print('错误，当前图片无法下载')
-        # else:
-        #     if len(pic) > 200:
-        #         pic_name = os.path.basename(image[i])
-        #         fp = open(pic_name, 'wb')
-        #         fp.write(pic)
-        #         fp.close()
-        #         with tarfile.open(avid + '.tar', 'a') as tar:
-        #             tar.add(pic_name)
-        #             os.system('rm '+ pic_name)
-        file_object.write(image[i] + '\n')
+    for j in range(len(image)):
+        print('sample:',image[j])
+        # for i in range(5):
+        #     try:
+        #         pic = urllib.request.urlopen(image[j]).read()
+        #         break
+        #     # except BaseException as ret:
+        #     #     print(ret)
+        #     #     # print('错误，当前图片无法下载')
+        #     # except IncompleteRead:
+        #     except Exception as ret:
+        #         print(ret)
+        #         if i == 4:
+        #             raise       # give up after 5 attempts
+
+        # if len(pic) > 200:
+        #     pic_name = os.path.basename(image[j])
+        #     fp = open(avid + '/' + pic_name, 'wb')
+        #     fp.write(pic)
+        #     fp.close()
+        #     # with tarfile.open(avid + '.tar', 'a') as tar:
+        #     #     tar.add(pic_name)
+        #     #     os.system('rm '+ pic_name)
+
+        file_object.write(image[j] + '\n')
     file_object.close()
 
     '''获取uc'''
@@ -182,8 +205,21 @@ def javbus(avid):
     html = html + "    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n"
     global html_global
     global complete_name_globals
+    
+    pattern = re.compile(r"<a class=\"movie-box\" href=\"https://www.javbus.com/ja/.*?\"")
+    match = pattern.findall(html_global)
+
+    file_object = codecs.open("todo.list", "a", "utf-8")
+    linsk = []
+    for i in range(len(match)):
+        linsk.append(match[i].replace("<a class=\"movie-box\" href=\"https://www.javbus.com/ja/","").replace("\"",""))
+    for i in range(len(linsk)):
+        file_object.write(linsk[i] + '\n')
+    file_object.close()
+
     html_global = html_global.replace("    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n", html)
     file_object = codecs.open(avid + '/' + os.path.basename(complete_name_globals), "w", "utf-8")
+    # file_object = codecs.open(complete_name_globals, "w", "utf-8")
     file_object.write(html_global)
     file_object.close()
 
@@ -212,7 +248,7 @@ def javbus(avid):
                 avdist['date'] = td.a.text.replace(" ", "").replace("\t", "").replace("\r\n","")
         print(avdist)
 
-    os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt" + ' | tee ' + avid + '/' + avid + '_tee.log' )
+    os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt " + '--header \'sec-ch-ua: \"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\' --header \'sec-ch-ua-mobile: ?0\' --header \'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\' --header \'sec-ch-ua-platform: \"Linux\"\' --header \'Referer: https://www.javbus.com/ja/' + avid + '\' ' + ' | tee ' + avid + '/' + avid + '_tee.log' )
     with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
         tar.add(avid)
         os.system('rm -rf '+ avid)
@@ -267,7 +303,10 @@ if __name__ == '__main__':
 # 
     # javbus('BNST-036')
     # javbus('HHHA-001') # test HTTP Error 404: Not Found
+	# javbus('HEYZO-3379')
 
+    # for arg in sys.argv:
+    #    print(arg)
     # print(sys.argv[1])
     javbus(sys.argv[1])
     pass

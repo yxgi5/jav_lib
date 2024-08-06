@@ -26,7 +26,12 @@ do
 done
 
 
-if [ -f "*.tar.gz" ]; then
+#if [ -f "*.tar.gz" ]; then
+#    echo "mv -n *.tar.gz ${TARGET}"
+#    mv -n *.tar.gz ${TARGET}
+#fi
+files=$(ls *.tar.gz 2> /dev/null | wc -l)
+if [ "$files" != "0" ]; then
     echo "mv -n *.tar.gz ${TARGET}"
     mv -n *.tar.gz ${TARGET}
 fi

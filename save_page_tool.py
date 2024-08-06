@@ -98,15 +98,15 @@ def getAjax(avid):
             print(ret)
             if i == 4:
                raise       # give up after 5 attempts
-        else:
-            if len(pic) > 200:
-                pic_name = os.path.basename(img)
-                fp = open(avid+'/'+pic_name, 'wb')
-                fp.write(pic)
-                fp.close()
-                # with tarfile.open(avid + '.tar', 'x') as tar:
-                #     tar.add(pic_name)
-                #     os.system('rm '+ pic_name)
+
+    if len(pic) > 200:
+        pic_name = os.path.basename(img)
+        fp = open(avid+'/'+pic_name, 'wb')
+        fp.write(pic)
+        fp.close()
+        # with tarfile.open(avid + '.tar', 'x') as tar:
+        #     tar.add(pic_name)
+        #     os.system('rm '+ pic_name)
 
     # os.system("aria2c -j 10 -x 2 --all-proxy='http://127.0.0.1:8118' "+ img)
     # file_object.write(img + '\n')
@@ -119,23 +119,23 @@ def getAjax(avid):
     for i in range(len(match)):
         image.append(match[i].replace("<a class=\"sample-box\" href=\"","").replace("\"",""))
 
-    for i in range(len(image)):
-        # print('sample:',image[i])
+    for j in range(len(image)):
+        # print('sample:',image[j])
         # try:
-        #     pic = urllib.request.urlopen(image[i], timeout=1000).read()
+        #     pic = urllib.request.urlopen(image[j], timeout=1000).read()
         # except BaseException as ret:
         #     print(ret)
         #     # print('错误，当前图片无法下载')
         # else:
         #     if len(pic) > 200:
-        #         pic_name = os.path.basename(image[i])
+        #         pic_name = os.path.basename(image[j])
         #         fp = open(pic_name, 'wb')
         #         fp.write(pic)
         #         fp.close()
         #         with tarfile.open(avid + '.tar', 'a') as tar:
         #             tar.add(pic_name)
         #             os.system('rm '+ pic_name)
-        file_object.write(image[i] + '\n')
+        file_object.write(image[j] + '\n')
     file_object.close()
 
     '''获取uc'''
@@ -214,8 +214,8 @@ def javbus(avid):
     # file_object = codecs.open(complete_name_globals, "w", "utf-8")
     file_object.write(html_global)
     file_object.close()
- 
-     # with tarfile.open(avid + '.tar', 'a') as tar:
+
+    # with tarfile.open(avid + '.tar', 'a') as tar:
     #     tar.add(os.path.basename(complete_name_globals))
     #     os.remove(complete_name_globals)
 
@@ -242,8 +242,8 @@ def javbus(avid):
 
     os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt" + ' | tee ' + avid + '/' + avid + '_tee.log' )
     with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
-       tar.add(avid)
-       os.system('rm -rf '+ avid)
+        tar.add(avid)
+        os.system('rm -rf '+ avid)
     pass
 
 
@@ -295,7 +295,10 @@ if __name__ == '__main__':
 # 
     # javbus('BNST-036')
     # javbus('HHHA-001') # test HTTP Error 404: Not Found
+	# javbus('HEYZO-3379')
 
+    # for arg in sys.argv:
+    #    print(arg)
     # print(sys.argv[1])
     javbus(sys.argv[1])
     pass
