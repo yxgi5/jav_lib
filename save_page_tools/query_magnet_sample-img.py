@@ -218,7 +218,8 @@ def javbus(avid):
     for i in range(len(linsk)):
         file_object.write(linsk[i] + '\n')
     file_object.close()
-
+    html_global = html_global.replace("/pics/cover/", "./")
+    html_global = re.sub("<a class=\"sample-box\" href=\".*/(.*.jpg\")", "<a class=\"sample-box\" href=\"./\\1", html_global)
     html_global = html_global.replace("    </table>\n    <div id=\"movie-loading\" style=\"display: none;\">\n", html)
     file_object = codecs.open(avid + '/' + os.path.basename(complete_name_globals), "w", "utf-8")
     # file_object = codecs.open(complete_name_globals, "w", "utf-8")
