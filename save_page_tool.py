@@ -117,7 +117,7 @@ def getAjax(avid):
     match = img_pattern.findall(html)
     image = []
     for i in range(len(match)):
-        image.append(match[i].replace("<a class=\"sample-box\" href=\"","").replace("\"",""))
+        image.append(match[i].replace("<a class=\"sample-box\" href=\"","").replace("\"","").replace("/imgs/bigsample/","https://www.javbus.com//imgs/bigsample/"))
 
     for j in range(len(image)):
         # print('sample:',image[j])
@@ -240,7 +240,7 @@ def javbus(avid):
                 avdist['date'] = td.a.text.replace(" ", "").replace("\t", "").replace("\r\n","")
         # print(avdist)
 
-    os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt" + ' | tee ' + avid + '/' + avid + '_tee.log' )
+    os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt " + '--header \'sec-ch-ua: \"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\' --header \'sec-ch-ua-mobile: ?0\' --header \'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\' --header \'sec-ch-ua-platform: \"Linux\"\' --header \'Referer: https://www.javbus.com/ja/' + avid + '\' ' + ' | tee ' + avid + '/' + avid + '_tee.log' )
     with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
         tar.add(avid)
         os.system('rm -rf '+ avid)
