@@ -126,5 +126,69 @@ BeautifulSoup不完全靠谱有时候会失败，可能需要加大超时限制
 ```
 
 
+# aria2c headers
+
+先 bash 挂梯子，然后可以这样伪装浏览器
+```
+aria2c 'https://www.javbus.com/imgs/bigsample/1u4s_b_1.jpg' \
+  --header 'sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' \
+  --header 'Referer: https://www.javbus.com/ja/' \
+  --header 'sec-ch-ua-mobile: ?0' \
+  --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' \
+  --header 'sec-ch-ua-platform: "Linux"'
+```
+or
+```
+aria2c 'https://www.javbus.com/imgs/bigsample/1u4s_b_1.jpg' \
+  --header 'sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' \
+  --header 'Referer: https://www.javbus.com/ja/HEYZO-3349' \
+  --header 'sec-ch-ua-mobile: ?0' \
+  --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' \
+  --header 'sec-ch-ua-platform: "Linux"'
+```
+
+# 提取 input.list
+
+保存 navigation page. 看来是要cookie的
+```
+aria2c 'https://www.javbus.com/ja/star/1ny/6' \
+  --header 'authority: www.javbus.com' \
+  --header 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
+  --header 'accept-language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7' \
+  --header 'cache-control: max-age=0' \
+  --header 'cookie: 4fJN_2132_seccodecSeRRfg5=14339.4cce2e4f1ae59e531e; 4fJN_2132_seccodecSTVfEvf=9372.f1ae0a808eec67ca6a; 4fJN_2132_seccodecSXYwYAC=20246.0620c823cb43b800c7; 4fJN_2132_seccodecSM7ir7C=32974.501fed7ed7e50412ed; 4fJN_2132_seccodecSQTZPiM=26549.061809068ea08ce4ce; PHPSESSID=9ku0thftv26h49i683n1ml0ag1; existmag=mag; dv=1' \
+  --header 'referer: https://www.javbus.com/ja/star/1ny' \
+  --header 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="104", "Opera";v="90"' \
+  --header 'sec-ch-ua-mobile: ?0' \
+  --header 'sec-ch-ua-platform: "Linux"' \
+  --header 'sec-fetch-dest: document' \
+  --header 'sec-fetch-mode: navigate' \
+  --header 'sec-fetch-site: same-origin' \
+  --header 'sec-fetch-user: ?1' \
+  --header 'upgrade-insecure-requests: 1' \
+  --header 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.84' \
+  -o page.html
+```
+短一点可以这样
+```
+aria2c 'https://www.javbus.com/ja/star/1ny/5' \
+  --header 'sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' \
+  --header 'cookie: 4fJN_2132_seccodecSeRRfg5=14339.4cce2e4f1ae59e531e; 4fJN_2132_seccodecSTVfEvf=9372.f1ae0a808eec67ca6a; 4fJN_2132_seccodecSXYwYAC=20246.0620c823cb43b800c7; 4fJN_2132_seccodecSM7ir7C=32974.501fed7ed7e50412ed; 4fJN_2132_seccodecSQTZPiM=26549.061809068ea08ce4ce; PHPSESSID=9ku0thftv26h49i683n1ml0ag1; existmag=mag; dv=1' \
+  --header 'Referer: https://www.javbus.com/ja/star/1ny/' \
+  --header 'sec-ch-ua-mobile: ?0' \
+  --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' \
+  --header 'sec-ch-ua-platform: "Linux"' \
+  -o page.html
+```
+
+导出自动输入文件
+```
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list
+```
+然后
+```
+./auto_start.sh
+```
+
 
 
