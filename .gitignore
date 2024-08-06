@@ -5,3 +5,5 @@ log.log
 .idea
 .vscode
 .git
+*.tar.gz
+now_printing*
