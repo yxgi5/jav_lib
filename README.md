@@ -190,5 +190,26 @@ cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g'
 ./auto_start.sh
 ```
 
+## 批量提取 到 input.list
 
+```
+cat tmp.txt | grep -e "https://www.javbus.com/ja/star/" | sed 's/^.*\(https:\/\/www.javbus.com\/ja\/star\/.*\)".*$/\1/' > navigation.list
+
+list=$(cat navigation.list)
+for i in $list
+do
+aria2c \
+  --header 'sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' \
+  --header 'cookie: 4fJN_2132_seccodecSeRRfg5=14339.4cce2e4f1ae59e531e; 4fJN_2132_seccodecSTVfEvf=9372.f1ae0a808eec67ca6a; 4fJN_2132_seccodecSXYwYAC=20246.0620c823cb43b800c7; 4fJN_2132_seccodecSM7ir7C=32974.501fed7ed7e50412ed; 4fJN_2132_seccodecSQTZPiM=26549.061809068ea08ce4ce; PHPSESSID=9ku0thftv26h49i683n1ml0ag1; existmag=mag; dv=1' \
+  --header 'Referer: https://www.javbus.com/ja/star/1ny/' \
+  --header 'sec-ch-ua-mobile: ?0' \
+  --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' \
+  --header 'sec-ch-ua-platform: "Linux"' \
+  -o `echo $i | sed -e 's/https:\/\/www.javbus.com\/ja\/star\///'`.html \
+  $i
+done
+
+
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && rm *.html
+```
 
