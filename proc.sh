@@ -13,11 +13,13 @@ IFS=$(echo -en "\n\b")
 # #mv ${folders}* $folders
 # done
 
-for folders in `find . -maxdepth 1 -type d`
+#for folders in `find . -maxdepth 1 -type d`
+for folders in `find . -maxdepth 1 -type d | sed -e 's/.\///' | sed -e 's/^[\.].*$//' | sed -e 's/save_page_tools//' | sed -e 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d'`
 do
 #echo $folders
 #echo $folders | sed -e 's/\s.*$//' | sed -e 's/.\///'
-if [ $folders != "." ]
+# if [ $folders != `echo $folders | sed -e 's/\s.*$//' | sed -e 's/.\///'` ]
+if [ $folders != "." -a $folders != ".git" -a $folders != ".vscode" -a $folders != ".idea" ]
 then
     mkdir -p `echo $folders | sed -e 's/\s.*$//' | sed -e 's/.\///'`
     mv $folders `echo $folders | sed -e 's/\s.*$//' | sed -e 's/.\///'`
@@ -48,7 +50,7 @@ do
 	sort -u piclinks > piclinks.tmp
 	mv piclinks.tmp piclinks
 	cp piclinks `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`/`echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`.txt
-    aria2c -j 10 -x 2 -i piclinks --header 'sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' --header 'sec-ch-ua-mobile: ?0' --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' --header 'sec-ch-ua-platform: "Linux"' --header 'Referer: https://www.javbus.com/ja/`echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`' | tee `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`/`echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`_tee.log
+    aria2c -j 10 -x 2 -i piclinks --header 'sec-ch-ua: "Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"' --header 'sec-ch-ua-mobile: ?0' --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' --header 'sec-ch-ua-platform: "Linux"' --header 'Referer: https://www.javbus.com/ja/' | tee `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`/`echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`_tee.log
     rm now_printing*
 #    echo $names
 #    echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///' 

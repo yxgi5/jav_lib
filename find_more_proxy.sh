@@ -13,7 +13,8 @@ SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
 
 #临时保存的页面内含有的可提取链接
-lists=`cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u` 
+list=`find . -maxdepth 1 -type f -name "*.html" -o -name "*.htm" | xargs -d '\n' grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u`
+#lists=`cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u` 
 # #先从总数据库检查是否存在，如果有就不保留
 # for i in $lists
 # do
@@ -31,7 +32,8 @@ if [ -e tmp.* ]
     then rm tmp.*
 fi
 #已经保存的页面
-find . -maxdepth 1 -type d | sed -e 's/\s.*$//' | sed -e 's/.\///' | sed -e 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' > tmp1.txt
+#find . -maxdepth 1 -type d | sed -e 's/\s.*$//' | sed -e 's/.\///' | sed -e 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' > tmp1.txt
+find . -maxdepth 1 -type d | sed -e 's/\s.*$//' | sed -e 's/.\///' | sed -e 's/^[\.].*$//' | sed -e 's/save_page_tools//' | sed -e 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' > tmp1.txt
 #sort -u tmp1.txt > tmp.txt
 #sed -i 's/^.$//g' tmp.txt
 #cat tmp.txt | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' > tmp1.txt
