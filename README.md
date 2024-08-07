@@ -252,3 +252,28 @@ done
 
 ```
 
+
+在jav_lib_git上一层目录新建一个html目录，新建文件 watch_html.sh
+```
+#!/bin/bash
+
+files=$(ls ../jav_lib_git/*.html 2> /dev/null | wc -l)
+if [ "$files" != "0" ]; then
+    echo "mv *.html ."
+    mv ../jav_lib_git/*.html .
+else
+    exit 1
+fi
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && rm *.html
+
+```
+每隔10秒移动html并提取删除
+```
+watch -n 10 ./watch_html.sh
+```
+
+
+
+
+
+
