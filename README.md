@@ -32,8 +32,9 @@ CAWD-700
 CAWD-701
 CAWD-702
 ```
+参考 [批量提取 input.list](#batch_update_input.list)
 
-自动下载页面及封面的脚本有些情况下不能下载，还是在input.list，然后可以按手动存档流程执行，比如添加到 todo.md 。
+有些情况下下载失败，失败的车牌还是放在input.list，然后可以按手动存档流程执行，比如添加到 todo.md 。
 
 
 如果是骑兵，执行命令
@@ -147,7 +148,7 @@ aria2c 'https://www.javbus.com/imgs/bigsample/1u4s_b_1.jpg' \
   --header 'sec-ch-ua-platform: "Linux"'
 ```
 
-# 提取 input.list
+<span id="batch_update_input.list"># 批量提取 input.list</span>
 
 保存 navigation page. 看来是要cookie的
 ```
