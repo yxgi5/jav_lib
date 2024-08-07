@@ -18,7 +18,8 @@ do
         --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' \
         --header 'sec-ch-ua-platform: "Linux"' \
         -o `echo $i | sed -e 's/^.*\/\(.*\)$/\1/'`.html \
-        $i
+        $i \
+    | tee -a navigation_download.log
 
     file_name=`echo $i | sed -e 's/^.*\/\(.*\)$/\1/'`.html
     
@@ -44,10 +45,21 @@ do
                 --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36' \
                 --header 'sec-ch-ua-platform: "Linux"' \
                 -o `echo $next | sed -e 's/^.*\/\(.*\/.*\)$/\1/' | sed -e 's/\//_/'`.html \
-                $next
+                $next \
+            | tee -a navigation_download.log
 
             file_name=`echo $next | sed -e 's/^.*\/\(.*\/.*\)$/\1/' | sed -e 's/\//_/'`.html
         fi
     done
 
 done
+
+
+# { cat navigation_download.log | grep -e "errorCode.*URI=" | sed -e 's/^.*URI=\(.*\)$/\1/'; cat navigation.list; } > navigation.list.new && mv navigation.list{.new,} && rm navigation_download.log
+
+# { cat navigation_download.log | grep -e "errorCode.*URI=" | sed -e 's/^.*URI=\(.*\)$/\1/'; cat navigation.list; } > navigation.list.new && mv navigation.list{.new,} && rm navigation_download.log && { cat navigation.list | sort -u; } > navigation.list.new && mv navigation.list{.new,}
+
+
+
+
+
