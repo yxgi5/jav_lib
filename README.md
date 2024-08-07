@@ -148,8 +148,8 @@ aria2c 'https://www.javbus.com/imgs/bigsample/1u4s_b_1.jpg' \
   --header 'sec-ch-ua-platform: "Linux"'
 ```
 
-<span id="batch_update_input.list"></span>
-# 批量提取 input.list
+# 提取 input.list
+
 
 保存 navigation page. 看来是要cookie的
 ```
@@ -192,6 +192,7 @@ cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g'
 ./auto_start.sh
 ```
 
+<span id="batch_update_input.list"></span>
 ## 批量提取 到 input.list
 
 `navigation页面`是包含几个单体番号页面链接的集合页面，可能有`下一页`
