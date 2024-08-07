@@ -207,3 +207,12 @@ cat tmp.txt | grep -e "https://www.javbus.com/ja/star/" | sed 's/^.*\(https:\/\/
 cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && rm *.html
 ```
 
+然后可以循环运行`./auto_start.sh`
+```
+for i in {0..20}
+do
+./auto_start.sh
+mv *.tar.gz /opt/porno/AV_lib/New
+done
+```
+
