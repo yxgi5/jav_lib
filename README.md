@@ -202,7 +202,7 @@ cat tmp.txt | grep -e "https://www.javbus.com/ja/star/" | sed 's/^.*\(https:\/\/
 ```
 ./navigation_download.sh
 ```
-然后提取所有单体番号页面链接
+然后提取所有单体番号页面链接到`input.list`
 ```
 cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && rm *.html
 ```
