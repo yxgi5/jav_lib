@@ -244,6 +244,11 @@ do
 ./auto_start.sh
 mv *.tar.gz /opt/porno/AV_lib/New
 done
+```
+
+
+```
+{ cat input.list | sort -u; } > input.list.new && mv input.list{.new,}
 
 ```
 
