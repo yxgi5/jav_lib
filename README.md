@@ -148,8 +148,8 @@ aria2c 'https://www.javbus.com/imgs/bigsample/1u4s_b_1.jpg' \
   --header 'sec-ch-ua-platform: "Linux"'
 ```
 
-# 批量提取 input.list
 <span id="batch_update_input.list"></span>
+# 批量提取 input.list
 
 保存 navigation page. 看来是要cookie的
 ```
