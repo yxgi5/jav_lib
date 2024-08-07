@@ -39,8 +39,8 @@ touch input.list
 for i in ${todo[@]}; do echo $i>>input.list; done
 sed -i 'N;s/^\n//g' input.list
 
-echo pause
-pause
+#echo pause
+#pause
 
 for line in $(cat input.list)
 do
