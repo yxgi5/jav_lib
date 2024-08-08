@@ -241,7 +241,7 @@ cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g'
 
 for i in {0..20000}
 do
-./auto_start.sh
+./auto_start.sh | tee -a auto_start.sh.log
 mv *.tar.gz /opt/porno/AV_lib/New
 done
 ```

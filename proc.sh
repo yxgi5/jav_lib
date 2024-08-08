@@ -43,7 +43,7 @@ for names in `find . -maxdepth 1 -type f -name "*.html" | sed -e 's/.\///'`
 do
     echo "donwloading for $names"
 	# cat $names | grep "/imgs/cover/" | sed -e "s/^.*var img = '\(.*\)'.*$/https:\/\/www.javbus.com\1/" > piclinks
-    cat $names | grep "https://pics.dmm.co.jp" | sed 's/\"/\n/g' | grep "https://pics.dmm.co.jp" > piclinks
+    cat $names | grep "https://pics.dmm.co.jp" | sed 's/\"/\n/g' | sed "s/'/\n/g" | grep "https://pics.dmm.co.jp" > piclinks
     cat $names | grep "https://image.mgstage.com" | sed 's/\"/\n/g' | grep "https://image.mgstage.com" >> piclinks
     cat $names | grep "https://www.javbus.com/imgs/bigsample" | sed 's/\"/\n/g' | grep "https://www.javbus.com/imgs/bigsample" >> piclinks
 	cat $names | grep "/imgs/bigsample" | sed 's/\"/\n/g' | grep -e "^/imgs/bigsample" | sed -e "s/^\(.*\)$/https:\/\/www.javbus.com\1/" >> piclinks
