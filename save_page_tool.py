@@ -143,39 +143,39 @@ def getAjax(avid):
     for j in range(len(image)):
         # print('sample:',image[j])
 
-        parsed = urlparse(url)
-        if parsed.netloc == 'pics.dmm.co.jp':
-            for i in range(5):
-                try:
-                    response = requests.get(image[j], headers=headers, timeout=10)
-                    if response.status_code == 200:
-                        break
-                    else:
-                        response.raise_for_status()
+        # parsed = urlparse(url)
+        # if parsed.netloc == 'pics.dmm.co.jp':
+        #     for i in range(5):
+        #         try:
+        #             response = requests.get(image[j], headers=headers, timeout=10)
+        #             if response.status_code == 200:
+        #                 break
+        #             else:
+        #                 response.raise_for_status()
                         
-                except Exception as ret:
-                    print(ret)
-                    if i == 4:
-                        with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
-                            fd.write('%s\n' % image[j])
-                        # raise       # give up after 5 attempts
-                        pass
-        else:
-            for i in range(5):
-                try:
-                    response = requests.get(image[j], headers=headers, proxies=proxies, timeout=10)
-                    if response.status_code == 200:
-                        break
-                    else:
-                        response.raise_for_status()
+        #         except Exception as ret:
+        #             print(ret)
+        #             if i == 4:
+        #                 with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
+        #                     fd.write('%s\n' % image[j])
+        #                 # raise       # give up after 5 attempts
+        #                 pass
+        # else:
+        #     for i in range(5):
+        #         try:
+        #             response = requests.get(image[j], headers=headers, proxies=proxies, timeout=10)
+        #             if response.status_code == 200:
+        #                 break
+        #             else:
+        #                 response.raise_for_status()
                         
-                except Exception as ret:
-                    print(ret)
-                    if i == 4:
-                        with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
-                            fd.write('%s\n' % image[j])
-                        # raise       # give up after 5 attempts
-                        pass
+        #         except Exception as ret:
+        #             print(ret)
+        #             if i == 4:
+        #                 with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
+        #                     fd.write('%s\n' % image[j])
+        #                 # raise       # give up after 5 attempts
+        #                 pass
 
         # for i in range(5):
         #     try:
@@ -193,21 +193,21 @@ def getAjax(avid):
         #             # raise       # give up after 5 attempts
         #             pass
 
-        if response.history:
-            # print("Request was redirected")
-            # for resp in response.history:
-                # print(resp.status_code, resp.url)
-            # print("Final destination:")
-            # print(response.status_code, response.url)
-            pass
-        elif response.status_code == 200:
-            # print("Request was not redirected")
-            pic = response.content
-            if len(pic) > 200:
-                pic_name = os.path.basename(image[j])
-                fp = open(avid+'/'+pic_name, 'wb')
-                fp.write(pic)
-                fp.close()      
+        # if response.history:
+        #     # print("Request was redirected")
+        #     # for resp in response.history:
+        #         # print(resp.status_code, resp.url)
+        #     # print("Final destination:")
+        #     # print(response.status_code, response.url)
+        #     pass
+        # elif response.status_code == 200:
+        #     # print("Request was not redirected")
+        #     pic = response.content
+        #     if len(pic) > 200:
+        #         pic_name = os.path.basename(image[j])
+        #         fp = open(avid+'/'+pic_name, 'wb')
+        #         fp.write(pic)
+        #         fp.close()      
 
 
         file_object.write(image[j] + '\n')
@@ -299,8 +299,8 @@ def javbus(avid):
                 avdist['date'] = td.a.text.replace(" ", "").replace("\t", "").replace("\r\n","")
         # print(avdist)
 
-    # os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt " + '--header \'sec-ch-ua: \"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\' --header \'sec-ch-ua-mobile: ?0\' --header \'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\' --header \'sec-ch-ua-platform: \"Linux\"\' --header \'Referer: https://www.javbus.com/ja/' + avid + '\' ' + ' | tee ' + avid + '/' + avid + '_tee.log' )
-    # os.system('rm '+ avid + '/now_printing*')
+    os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt " + '--header \'sec-ch-ua: \"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\' --header \'sec-ch-ua-mobile: ?0\' --header \'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\' --header \'sec-ch-ua-platform: \"Linux\"\' --header \'Referer: https://www.javbus.com/ja/' + avid + '\' ' + ' | tee ' + avid + '/' + avid + '_tee.log' )
+    os.system('rm '+ avid + '/now_printing*')
     with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
         tar.add(avid)
         os.system('rm -rf '+ avid)
