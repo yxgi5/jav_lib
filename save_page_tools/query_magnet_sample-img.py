@@ -94,7 +94,11 @@ def getAjax(avid):
     for i in range(5):
         try:
             response = requests.get(img, headers=headers, proxies=proxies, timeout=10)
-            break
+            if response.status_code == 200:
+                break
+            else:
+                response.raise_for_status()
+                
         except Exception as ret:
             print(ret)
             if i == 4:
@@ -117,7 +121,7 @@ def getAjax(avid):
             fp.close()
 
 
-    file_object = codecs.open(avid + '/' + avid + ".txt", "a", "utf-8")
+    file_object = codecs.open(avid + '/' + avid + ".txt", "w", "utf-8")
     img_pattern = re.compile(r"<a class=\"sample-box\" href=\".*?\"")
     match = img_pattern.findall(html)
     image = []
