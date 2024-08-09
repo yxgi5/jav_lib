@@ -67,7 +67,7 @@ fi
 done
 
 # 排除404的车牌
-if [ -e 404_url.txt ]
+if [ -e 404_url.txt ]; then
     cat 404_url.txt | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> tmp.txt
     echo -e 'CREATE TABLE `files` (`files` TEXT);\n-- .tables\nselect * from files;\n.import tmp.txt files\n.exit\n' > tmp.sql
     sqlite3 tmp.db < tmp.sql
