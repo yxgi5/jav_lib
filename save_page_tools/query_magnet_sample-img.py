@@ -86,7 +86,8 @@ def getAjax(avid):
     global complete_name_globals
     html_global = html
     complete_name_globals = complete_name
-    
+    file_object = codecs.open(avid + '/' + avid + ".txt", "w", "utf-8")
+
     '''获取img'''
     # img_pattern = re.compile(r"var img = '.*?'")
     # match = img_pattern.findall(html)
@@ -94,41 +95,41 @@ def getAjax(avid):
     img=soup.select_one('a[class="bigImage"]').find('img')['src']
     if img[0] == '/':
         img = 'https://www.javbus.com' + img
+
+        for i in range(5):
+            try:
+                response = requests.get(img, headers=headers, proxies=proxies, timeout=3)
+                if response.status_code == 200:
+                    break
+                else:
+                    response.raise_for_status()
+                    
+            except Exception as ret:
+                print(ret)
+                if i == 4:
+                    with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
+                        fd.write('%s\n' % img)
+                    # raise       # give up after 5 attempts
+                    pass
+
+        if response.history:
+            # print("Request was redirected")
+            # for resp in response.history:
+                # print(resp.status_code, resp.url)
+            # print("Final destination:")
+            # print(response.status_code, response.url)
+            pass
+        elif response.status_code == 200:
+            # print("Request was not redirected")
+            pic = response.content
+            if len(pic) > 200:
+                pic_name = os.path.basename(img)
+                fp = open(avid+'/'+pic_name, 'wb')
+                fp.write(pic)
+                fp.close()
+    else:
+        file_object.write(img + '\n')
     # print('封面为:',img)
-    for i in range(5):
-        try:
-            response = requests.get(img, headers=headers, proxies=proxies, timeout=3)
-            if response.status_code == 200:
-                break
-            else:
-                response.raise_for_status()
-                
-        except Exception as ret:
-            print(ret)
-            if i == 4:
-                with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
-                    fd.write('%s\n' % img)
-                # raise       # give up after 5 attempts
-                pass
-
-    if response.history:
-        # print("Request was redirected")
-        # for resp in response.history:
-            # print(resp.status_code, resp.url)
-        # print("Final destination:")
-        # print(response.status_code, response.url)
-        pass
-    elif response.status_code == 200:
-        # print("Request was not redirected")
-        pic = response.content
-        if len(pic) > 200:
-            pic_name = os.path.basename(img)
-            fp = open(avid+'/'+pic_name, 'wb')
-            fp.write(pic)
-            fp.close()
-
-
-    file_object = codecs.open(avid + '/' + avid + ".txt", "w", "utf-8")
 
     # img_pattern = re.compile(r"<a class=\"sample-box\" href=\".*?\"")
     # match = img_pattern.findall(html)
