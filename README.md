@@ -219,6 +219,13 @@ mv *.tar.gz /opt/porno/AV_lib/New
 done
 ```
 
+如果打断之后，只想更新 input.list 为不在总库的车牌，先不要移动当前目录下打包好的，依次执行
+```
+./update_input_list.sh
+./av_mv.sh
+```
+
+
 
 # tmp
 ```
