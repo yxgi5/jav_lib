@@ -45,7 +45,7 @@ def getAjax(avid):
 
     for i in range(5):
         try:
-            response = requests.get(url, headers=headers, proxies=proxies, timeout=10)
+            response = requests.get(url, headers=headers, proxies=proxies, timeout=3)
             if response.status_code == 200:
                 break
             elif response.status_code == 404:
@@ -88,13 +88,16 @@ def getAjax(avid):
     complete_name_globals = complete_name
     
     '''获取img'''
-    img_pattern = re.compile(r"var img = '.*?'")
-    match = img_pattern.findall(html)
-    img=match[0].replace("var img = '","https://www.javbus.com").replace("'","")
+    # img_pattern = re.compile(r"var img = '.*?'")
+    # match = img_pattern.findall(html)
+    # img=match[0].replace("var img = '","https://www.javbus.com").replace("'","")
+    img=soup.select_one('a[class="bigImage"]').find('img')['src']
+    if img[0] == '/':
+        img = 'https://www.javbus.com' + img
     # print('封面为:',img)
     for i in range(5):
         try:
-            response = requests.get(img, headers=headers, proxies=proxies, timeout=10)
+            response = requests.get(img, headers=headers, proxies=proxies, timeout=3)
             if response.status_code == 200:
                 break
             else:
@@ -105,7 +108,8 @@ def getAjax(avid):
             if i == 4:
                 with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
                     fd.write('%s\n' % img)
-                raise       # give up after 5 attempts
+                # raise       # give up after 5 attempts
+                pass
 
     if response.history:
         # print("Request was redirected")
@@ -125,12 +129,17 @@ def getAjax(avid):
 
 
     file_object = codecs.open(avid + '/' + avid + ".txt", "w", "utf-8")
-    img_pattern = re.compile(r"<a class=\"sample-box\" href=\".*?\"")
-    match = img_pattern.findall(html)
+
+    # img_pattern = re.compile(r"<a class=\"sample-box\" href=\".*?\"")
+    # match = img_pattern.findall(html)
+    match = soup.select('a[class="sample-box"]')
     image = []
     for i in range(len(match)):
-        image.append(match[i].replace("<a class=\"sample-box\" href=\"","").replace("\"","").replace("/imgs/bigsample/","https://www.javbus.com//imgs/bigsample/"))
-    
+        if match[i]['href'][0] == '/':
+            image.append('https://www.javbus.com' + match[i]['href'])
+        else:
+            image.append(match[i]['href'])
+       
     for j in range(len(image)):
         # print('sample:',image[j])
 
@@ -149,7 +158,8 @@ def getAjax(avid):
                     if i == 4:
                         with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
                             fd.write('%s\n' % image[j])
-                        raise       # give up after 5 attempts
+                        # raise       # give up after 5 attempts
+                        pass
         else:
             for i in range(5):
                 try:
@@ -164,8 +174,25 @@ def getAjax(avid):
                     if i == 4:
                         with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
                             fd.write('%s\n' % image[j])
-                        raise       # give up after 5 attempts
-        
+                        # raise       # give up after 5 attempts
+                        pass
+
+        # for i in range(5):
+        #     try:
+        #         response = requests.get(image[j], headers=headers, proxies=proxies, timeout=3)
+        #         if response.status_code == 200:
+        #             break
+        #         else:
+        #             response.raise_for_status()
+                    
+        #     except Exception as ret:
+        #         print(ret)
+        #         if i == 4:
+        #             with open(avid+'/'+'fail_img_url.txt', 'a') as fd:
+        #                 fd.write('%s\n' % image[j])
+        #             # raise       # give up after 5 attempts
+        #             pass
+
         if response.history:
             # print("Request was redirected")
             # for resp in response.history:
@@ -215,7 +242,7 @@ def javbus(avid):
     headers['Referer'] = 'https://www.javbus.com/ja/'+avid
     for i in range(5):
         try:
-            response = requests.get(url, headers=headers, proxies=proxies, timeout=10)
+            response = requests.get(url, headers=headers, proxies=proxies, timeout=3)
             if response.status_code == 200:
                 break
             else:
