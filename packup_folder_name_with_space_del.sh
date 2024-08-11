@@ -5,7 +5,7 @@
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
 
-for folders in `ls -l |grep ^d |awk '{print substr($0,index($0,$9))}'`
+for folders in `ls -l |grep ^d |awk '{print substr($0,index($0,$9))}' | sed 's/save_page_tools$//' |  sed '/^$/d'`
 #FILES=*
 #for folders in $FILES
 do 
