@@ -64,7 +64,7 @@ av.list被自动更新
 
 产生已经存档的车牌数据库
 ```
-./update_av_db.sh
+./av_list_update_db_update.sh
 ```
 
 ## 车牌catalog数据库
@@ -81,9 +81,9 @@ av.list被自动更新
 
 
 ## 按照catalog去保存页面
-`gen1000.sh`用于产生`simple_link.md`, 替换车牌基本上一个catalog的就全有连接了, 参数是车牌catalog
+`gen1000_single_bango_md_links_and_list.sh`用于产生`single_bango.md`和`single_bango.list`, 替换车牌基本上一个catalog的就全有连接了, 参数是车牌catalog
 ```
-./gen1000.sh AKKA
+./gen1000_single_bango_md_links_and_list.sh AKKA
 ```
 
 
