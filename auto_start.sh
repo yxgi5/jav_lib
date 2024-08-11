@@ -29,8 +29,6 @@ source ./update_input_list.sh
 #echo pause
 #pause
 
-
-
 #######################################################################################################
 # 调用 python 脚本 进行下载打包，爬新的车牌
 
@@ -49,9 +47,15 @@ done
 if [ -e todo.list ]; then
     sort -u todo.list >> input.list
     rm todo.list
+    cat input.list > input.list.new
+    mv input.list{.new,}
 fi
 
-
+if [ -e 404_bango.list ]; then
+    cat 404_bango.list | sort -u > 404_bango.list.new
+    mv 404_bango.list{.new,}
+    echo -e 'CREATE TABLE files (files TEXT);\n-- .tables\nselect * from files;\n.import 404_bango.list files\n.exit\n' | sqlite3 404_bango.db
+fi
 
 #########################################################################################################
 # 当前目录已有 *.tar.gz, 尝试提交到总库， 执行完一次 python 脚本 提交一次， 写入就没那么频繁了

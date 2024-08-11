@@ -46,13 +46,11 @@ fi
 done
 
 # 排除404的车牌
-# if [ -e 404_url.txt ]; then
 if [ -e 404_bango.list ]; then
     # cat 404_url.txt | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> tmp.txt
     cat 404_bango.list | sort -u > 404_bango.list.new
     mv 404_bango.list{.new,}
-    # echo -e 'CREATE TABLE files (files TEXT);\n-- .tables\nselect * from files;\n.import tmp.txt files\n.exit\n' > tmp.sql
-    echo -e 'CREATE TABLE files (files TEXT);\n-- .tables\nselect * from files;\n.import 404_bango.list files\n.exit\n' | sqlite3 tmp.db
+    echo -e 'CREATE TABLE files (files TEXT);\n-- .tables\nselect * from files;\n.import 404_bango.list files\n.exit\n' | sqlite3 404_bango.db
     todo1=()
     for i in ${todo[@]}
     do
