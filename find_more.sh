@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#export https_proxy="127.0.0.1:8118"
-#export http_proxy="127.0.0.1:8118"
+export https_proxy="127.0.0.1:8118"
+export http_proxy="127.0.0.1:8118"
 
 function pause(){
     read -n 1
@@ -42,7 +42,7 @@ cat tmp1.txt >> av.list
 if [ -e tmp.* ]
     then rm tmp.*
 fi
-source ./av.sh
+source ./av_db_list_update.sh
 
 
 #已经准备好要保存的页面链接，可能包括也可能不包括已经保存的页面

@@ -1,26 +1,5 @@
 #!/bin/bash
 
-# BASH Shell: For Loop File Names With Spaces
-# Set $IFS variable
-SAVEIFS=$IFS
-IFS=$(echo -en "\n\b")
-
-
-#########################################################################################################
-# javbus 域名的页面图片在我的网络条件需要挂代理，根据具体情况修改
-
-# 实际上是为了应对 python 脚本里用 aria2c 批量下载无码区 sample image 的情况，一般有码的不需要 在这里设置
-export https_proxy="127.0.0.1:8118"
-export http_proxy="127.0.0.1:8118"
-
-
-
-#########################################################################################################
-# 一个暂停函数
-function pause(){
-    read -n 1
-}
-
 
 #########################################################################################################
 # 当前目录已有 *.tar.gz, 尝试提交到总库， 开始运行时当前目录也可能有下载打包好的 *.tar.gz 没有更新到总库
@@ -38,7 +17,7 @@ cat tmp.txt >> av.list
 if [ -e tmp.* ]
     then rm tmp.*
 fi
-source ./av.sh
+source ./av_db_list_update.sh
 
 
 
@@ -88,5 +67,3 @@ for i in ${todo1[@]}; do echo $i>>input.list; done
 sed -i 'N;s/^\n//g' input.list
 
 
-# restore $IFS
-IFS=$SAVEIFS

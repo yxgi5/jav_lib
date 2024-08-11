@@ -251,7 +251,7 @@ cat navigation.list | sort -u > navigation.list.new
 mv navigation.list{.new,}
 
 ./navigation_download.sh
-cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && tar rvpf actresses_entrance.tar *.html && rm *.html
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> all_bango.list && tar rvpf actresses_entrance.tar *.html && rm *.html
 
 
 
@@ -275,7 +275,7 @@ mv uncensored_navigation.list{.new,}
 
 mv uncensored_navigation.list navigation.list
 ./navigation_download.sh
-cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && tar rvpf uncensored_actresses_entrance.tar *.html && rm *.html
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> all_bango.list && tar rvpf uncensored_actresses_entrance.tar *.html && rm *.html
 
 
 
@@ -288,7 +288,7 @@ done
 
 
 ```
-{ cat input.list | sort -u; } > input.list.new && mv input.list{.new,}
+{ cat all_bango.list | sort -u; } > all_bango.list.new && mv all_bango.list{.new,}
 
 ```
 
@@ -305,9 +305,9 @@ else
     exit 1
 fi
 
-cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list
-cat input.list | sort -u > input.list.new
-mv input.list{.new,}
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> all_bango.list
+cat all_bango.list | sort -u > all_bango.list.new
+mv all_bango.list{.new,}
 mkdir -p tmp/
 tar rvpf actresses_entrance.tar *.html && mv *.html tmp/    # 要分censored和unsensored来处理acresses
 #tar rvpf uncensored_actresses_entrance.tar *.html && mv *.html tmp/    # 要分censored和unsensored来处理acresses
@@ -317,6 +317,7 @@ tar rvpf actresses_entrance.tar *.html && mv *.html tmp/    # 要分censored和u
 ```
 watch -n 10 ./watch_html.sh
 ```
+
 这里添加一个 all_bango.list,经过上述处理之后的包括404的本站所有车牌的总集。
 
 ## 更新总集
