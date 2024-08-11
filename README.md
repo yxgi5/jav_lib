@@ -226,8 +226,8 @@ done
 ```
 
 
-
-# tmp
+# 提取和更新总集
+## 从0开始提取本站车牌总集
 ```
 export https_proxy="127.0.0.1:8118"
 export http_proxy="127.0.0.1:8118"
@@ -245,7 +245,15 @@ do
         -o `echo $i | sed -e 's/^.*\/\(.*\)$/\1/'`.html \
         https://www.javbus.com/ja/actresses/$i
 done
-cat *.html | grep "<a class=\"avatar-box text-center\" href=\"https://www.javbus.com/ja/star/" | sed -e 's/^.*href=\"\(.*\)\">.*$/\1/' > navigation.list && tar rvpf actresses_navigation_enty.tar *.html && rm *.html
+cat *.html | grep "<a class=\"avatar-box text-center\" href=\"https://www.javbus.com/ja/star/" | sed -e 's/^.*href=\"\(.*\)\">.*$/\1/' > navigation.list && tar rvpf actresses_navigation_entrance.tar *.html && rm *.html
+
+cat navigation.list | sort -u > navigation.list.new
+mv navigation.list{.new,}
+
+./navigation_download.sh
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && tar rvpf actresses_entrance.tar *.html && rm *.html
+
+
 
 for i in {1..442}
 do
@@ -259,10 +267,17 @@ do
         -o `echo $i | sed -e 's/^.*\/\(.*\)$/\1/'`.html \
         https://www.javbus.com/ja/uncensored/actresses/$i
 done
-cat *.html | grep "<a class=\"avatar-box text-center\" href=\"https://www.javbus.com/ja/uncensored/star/" | sed -e 's/^.*href=\"\(.*\)\">.*$/\1/' > navigation.list && tar rvpf uncensored_actresses_navigation_enty.tar *.html && rm *.html
+cat *.html | grep "<a class=\"avatar-box text-center\" href=\"https://www.javbus.com/ja/uncensored/star/" | sed -e 's/^.*href=\"\(.*\)\">.*$/\1/' >> uncensored_navigation.list && tar rvpf uncensored_actresses_navigation_entrance.tar *.html && rm *.html
 
+cat uncensored_navigation.list | sort -u > uncensored_navigation.list.new
+mv uncensored_navigation.list{.new,}
+
+
+mv uncensored_navigation.list navigation.list
 ./navigation_download.sh
-cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && tar rvpf actresses_enty.tar *.html && rm *.html
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && tar rvpf uncensored_actresses_entrance.tar *.html && rm *.html
+
+
 
 for i in {0..20000}
 do
@@ -289,14 +304,30 @@ if [ "$files" != "0" ]; then
 else
     exit 1
 fi
-cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && tar rvpf actresses_enty.tar *.html && rm *.html
+
+cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list
+cat input.list | sort -u > input.list.new
+mv input.list{.new,}
+mkdir -p tmp/
+tar rvpf actresses_entrance.tar *.html && mv *.html tmp/    # 要分censored和unsensored来处理acresses
+#tar rvpf uncensored_actresses_entrance.tar *.html && mv *.html tmp/    # 要分censored和unsensored来处理acresses
 
 ```
 每隔10秒移动html并提取删除
 ```
 watch -n 10 ./watch_html.sh
 ```
+这里添加一个 all_bango.list,经过上述处理之后的包括404的本站所有车牌的总集。
 
+## 更新总集
+参考 [批量提取 input.list](#batch_update_input.list)
+
+从
+```
+https://www.javbus.com/ja
+https://www.javbus.com/ja/uncensored
+```
+获取车牌
 
 
 
