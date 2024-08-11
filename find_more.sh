@@ -42,7 +42,7 @@ cat tmp1.txt >> av.list
 if [ -e tmp.* ]
     then rm tmp.*
 fi
-source ./av_db_list_update.sh
+source ./update_av_db.sh
 
 
 #已经准备好要保存的页面链接，可能包括也可能不包括已经保存的页面

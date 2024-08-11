@@ -17,7 +17,7 @@ cat tmp.txt >> av.list
 if [ -e tmp.* ]
     then rm tmp.*
 fi
-source ./av_db_list_update.sh
+source ./update_av_db.sh
 
 
 

@@ -79,7 +79,7 @@ done
 ##7z a -sdel -t7z -mx9 -aoa $folders.7z $folders
 #done
 
-source ./av_db_list_update.sh
+source ./update_av_db.sh
 
 rm piclinks
 

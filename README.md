@@ -62,9 +62,9 @@ av.list被自动更新
 
 ## 车牌数据库
 
-查看已经存档的车牌数据库
+产生已经存档的车牌数据库
 ```
-./generate_db_from_list.sh
+./update_av_db.sh
 ```
 
 ## 车牌catalog数据库
