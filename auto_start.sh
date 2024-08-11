@@ -38,7 +38,11 @@ source ./update_input_list.sh
 for line in $(cat input.list)
 do
     echo downloading $line
-    python3.8 save_page_tool.py $line
+    if [ -e /usr/bin/python3.8 ]; then
+        python3.8 save_page_tool.py $line
+    else
+        python3 save_page_tool.py $line
+    fi
 done
 
 # todo.list 是 python 脚本 从每个页面提取的(一般每个页面有几个其他车牌的展示)

@@ -6,7 +6,7 @@ fi
 sort -u av.list > av.list.new && mv av.list{.new,}
 sqlite3 av.db <<EOF
 drop table if exists files;
-CREATE TABLE `files` (`files` TEXT);
+CREATE TABLE files (files TEXT);
 -- .tables
 select * from files;
 .import av.list files

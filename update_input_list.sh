@@ -46,10 +46,13 @@ fi
 done
 
 # 排除404的车牌
-if [ -e 404_url.txt ]; then
-    cat 404_url.txt | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> tmp.txt
-    echo -e 'CREATE TABLE `files` (`files` TEXT);\n-- .tables\nselect * from files;\n.import tmp.txt files\n.exit\n' > tmp.sql
-    sqlite3 tmp.db < tmp.sql
+# if [ -e 404_url.txt ]; then
+if [ -e 404_bango.list ]; then
+    # cat 404_url.txt | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> tmp.txt
+    cat 404_bango.list | sort -u > 404_bango.list.new
+    mv 404_bango.list{.new,}
+    # echo -e 'CREATE TABLE files (files TEXT);\n-- .tables\nselect * from files;\n.import tmp.txt files\n.exit\n' > tmp.sql
+    echo -e 'CREATE TABLE files (files TEXT);\n-- .tables\nselect * from files;\n.import 404_bango.list files\n.exit\n' | sqlite3 tmp.db
     todo1=()
     for i in ${todo[@]}
     do
@@ -58,12 +61,19 @@ if [ -e 404_url.txt ]; then
         fi
     done
     rm tmp.*
+    # 总库中没有的写入到 input.list，已经排除了总库中有的车牌
+    rm input.list
+    touch input.list
+    for i in ${todo1[@]}; do echo $i>>input.list; done
+    sed -i 'N;s/^\n//g' input.list
+else
+    # 总库中没有的写入到 input.list，已经排除了总库中有的车牌
+    rm input.list
+    touch input.list
+    for i in ${todo[@]}; do echo $i>>input.list; done
+    sed -i 'N;s/^\n//g' input.list
 fi
 
-# 总库中没有的写入到 input.list，已经排除了总库中有的车牌
-rm input.list
-touch input.list
-for i in ${todo1[@]}; do echo $i>>input.list; done
-sed -i 'N;s/^\n//g' input.list
+
 
 

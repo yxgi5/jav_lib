@@ -49,8 +49,10 @@ def getAjax(avid):
             if response.status_code == 200:
                 break
             elif response.status_code == 404:
-                with open('404_url.txt', 'a') as fd:
-                    fd.write('%s\n' % url)
+                # with open('404_url.txt', 'a') as fd:
+                #     fd.write('%s\n' % url)
+                with open('404_bango.list', 'a') as fd:
+                    fd.write('%s\n' % avid)
                 return
             else:
                 response.raise_for_status()
@@ -58,9 +60,11 @@ def getAjax(avid):
         except Exception as ret:
             print(ret)
             if i == 4:
-               with open('fail_url.txt', 'a') as fd:
-                    fd.write('%s\n' % url)
-               raise       # give up after 5 attempts
+                # with open('fail_url.txt', 'a') as fd:
+                #     fd.write('%s\n' % url)
+                with open('fail_bango.list', 'a') as fd:
+                    fd.write('%s\n' % avid)
+                raise       # give up after 5 attempts
             
 
     try:
