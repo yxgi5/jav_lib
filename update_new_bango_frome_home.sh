@@ -134,9 +134,7 @@ do
 done
 
 # pause
-cat input.list >> all_bango.list
-cat all_bango.list | sort -u >> all_bango.list.new
-mv all_bango.list{.new,}
+source ./update_input_list.sh
 # source ./auto_start.sh
 
 

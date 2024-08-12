@@ -67,3 +67,7 @@ cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \
 mv input.list{.new,}
 
 
+cat input.list >> all_bango.list
+cat all_bango.list | sort -u >> all_bango.list.new
+mv all_bango.list{.new,}
+
