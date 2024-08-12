@@ -197,14 +197,21 @@ cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g'
 
 `navigation页面`是包含几个单体番号页面链接的集合页面，可能有`下一页`
 
-先更新navigation.list， 比如填入`https://www.javbus.com/ja/search/GOJU` 或者用 grep 过滤 html 源码
+先更新navigation.list， 比如填入`https://www.javbus.com/ja/search/GOJU` 或者 `https://www.javbus.com/ja`或者`https://www.javbus.com/ja/uncensored`
+
+或者用 grep 过滤 html 源码，比如`actresses`导航页面复制源码段到 `tmp.txt`
 ```
 cat tmp.txt | grep -e "https://www.javbus.com/ja/star/" | sed 's/^.*\(https:\/\/www.javbus.com\/ja\/star\/.*\)".*$/\1/' > navigation.list
 ```
+
 然后下载`navigation.list`里面的`navigation页面`
 ```
 ./navigation_download.sh
 ```
+
+更新的话根据情况在这里打断，并不需要全下载
+
+
 然后提取所有单体番号页面链接到`input.list`
 ```
 cat *.html | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u >> input.list && rm *.html

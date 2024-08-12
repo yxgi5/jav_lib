@@ -48,10 +48,21 @@ do
     fi
 done
 
+# 排除fail的车牌
+touch fail_bango.list
+source ./update_fail_db.sh
+todo2=()
+for i in ${todo1[@]}
+do
+    if [[ `sqlite3 404_bango.db "select * from files where files like '%$i%'"` == "" ]]; then
+        todo2+=($i)
+    fi
+done
+
 # 总库中没有的写入到 input.list，已经排除了总库中有的车牌
 rm input.list
 touch input.list
-for i in ${todo1[@]}; do echo $i>>input.list; done
+for i in ${todo2[@]}; do echo $i>>input.list; done
 cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> input.list.new
 mv input.list{.new,}
 
