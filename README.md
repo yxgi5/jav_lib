@@ -337,7 +337,18 @@ https://www.javbus.com/ja/uncensored
 ```
 获取车牌
 
+写一个脚本来从home更新总库和新增input.list
+```
+./update_new_bango_frome_home.sh
+```
 
-
+然后可以执行
+```
+for i in {0..20}
+do
+./auto_start.sh | tee -a auto_start.sh.log
+mv *.tar.gz /opt/porno/AV_lib/New
+done
+```
 
 

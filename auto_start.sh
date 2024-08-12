@@ -21,7 +21,6 @@ function pause(){
     read -n 1
 }
 
-
 source ./update_input_list.sh
 
 
