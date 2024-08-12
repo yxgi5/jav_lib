@@ -47,66 +47,9 @@ done
 if [ -e todo.list ]; then
     sort -u todo.list >> input.list
     rm todo.list
-    cat input.list > input.list.new
-    mv input.list{.new,}
 fi
 
-if [ -e 404_bango.list ]; then
-    cat 404_bango.list | sort -u > 404_bango.list.new
-    mv 404_bango.list{.new,}
-    echo -e 'CREATE TABLE files (files TEXT);\n-- .tables\nselect * from files;\n.import 404_bango.list files\n.exit\n' | sqlite3 404_bango.db
-fi
-
-#########################################################################################################
-# 当前目录已有 *.tar.gz, 尝试提交到总库， 执行完一次 python 脚本 提交一次， 写入就没那么频繁了
-
-# 清理临时文件
-if [ -e tmp.* ]
-    then rm tmp.*
-fi
-
-# 只提取当前目录已有 *.tar.gz 的 basename，其实就是车牌
-find . -maxdepth 1 -type f -name "*.tar.gz" | sed -e 's/\s.*$//' | sed -e 's/.\///' | sed -e 's/.tar.gz$//' | sed -e 's/^[\.].*$//' | sed -e 's/save_page_tools//' | sed -e 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' > tmp.txt
-
-# 为后续 排重更新总库
-cat tmp.txt >> av.list
-if [ -e tmp.* ]
-    then rm tmp.*
-fi
-source ./update_av_db.sh
-
-
-#########################################################################################################
-# 更新总库后，再更新 input.list，剩下出错的(没有打包出来的车牌)
-
-# 过滤出 input.list 里没有进总库的
-for line in $(cat input.list)
-do
-    if [[ `sqlite3 av.db "select * from files where files like '$line%'"` == "" ]]; then
-        todo_list+=($line)
-        echo $line not in db
-    else
-        echo $line exits in db
-    fi
-done
-
-# 清空 input.list
-if [ -e input.list ]
-    then rm input.list
-fi
-touch input.list
-
-# 过滤 input.list 里没有进总库的 车牌 写入 空的 input.list
-#for i in ${todo_list[@]}; do echo $i; echo "<https://www.javbus.com/ja/$i>">>more_link.md; done
-for i in ${todo_list[@]}; do echo $i>>input.list; done
-sed -i 'N;s/^\n//g' input.list
-sed -i 's/$/\n/g' input.list
-cat input.list | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' >> tmp1.txt
-sort -u tmp1.txt > tmp.txt
-sed -i 's/^.$//g' tmp.txt
-cat tmp.txt | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' > tmp1.txt
-mv tmp1.txt tmp.txt
-mv tmp.txt input.list
+source ./update_input_list.sh
 
 # restore $IFS
 IFS=$SAVEIFS
