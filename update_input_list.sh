@@ -1,6 +1,11 @@
 #!/bin/bash
 
 
+if [ -e todo.list ]; then
+    cat todo.list | sort -u >> input.list
+    rm todo.list
+fi
+
 # 如果存在 input.list 就排个序，并且去除空行， 如果不存在就创建一个空文件
 if [ ! -e input.list ]; then
         touch input.list
