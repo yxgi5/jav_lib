@@ -56,7 +56,7 @@ do
     todo2=()
     for i in ${todo1[@]}
     do
-        if [[ `sqlite3 404_bango.db "select * from files where files like '$i'"` == "" ]]; then
+        if [[ `sqlite3 fail_bango.db "select * from files where files like '$i'"` == "" ]]; then
             todo2+=($i)
         fi
     done
@@ -124,7 +124,7 @@ do
             todo2=()
             for i in ${todo1[@]}
             do
-                if [[ `sqlite3 404_bango.db "select * from files where files like '$i'"` == "" ]]; then
+                if [[ `sqlite3 fail_bango.db "select * from files where files like '$i'"` == "" ]]; then
                     todo2+=($i)
                 fi
             done
