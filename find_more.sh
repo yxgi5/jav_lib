@@ -33,7 +33,7 @@ todo=()
 for i in $lists
 do
 #echo $i
-if [[ `sqlite3 av.db "select * from files where files like '%$i%'"` == "" ]]; then
+if [[ `sqlite3 av.db "select * from files where files like '$i'"` == "" ]]; then
     echo $i new
     todo+=($i)
 fi
@@ -45,7 +45,7 @@ source ./update_404_db.sh
 todo1=()
 for i in ${todo[@]}
 do
-    if [[ `sqlite3 404_bango.db "select * from files where files like '%$i%'"` == "" ]]; then
+    if [[ `sqlite3 404_bango.db "select * from files where files like '$i'"` == "" ]]; then
         todo1+=($i)
     fi
 done
@@ -56,7 +56,7 @@ source ./update_fail_db.sh
 todo2=()
 for i in ${todo1[@]}
 do
-    if [[ `sqlite3 404_bango.db "select * from files where files like '%$i%'"` == "" ]]; then
+    if [[ `sqlite3 404_bango.db "select * from files where files like '$i'"` == "" ]]; then
         todo2+=($i)
     fi
 done
