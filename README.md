@@ -282,8 +282,10 @@ cat auto_start.sh.log | grep -A 5 -B 5  ERROR
 ```
 大概能够得到sample image下载失败的链接和压缩包名
 
-
-
+处理完毕后情况log文件
+```
+echo '' > auto_start.sh.log
+```
 
 
 
