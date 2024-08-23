@@ -276,4 +276,15 @@ https://pics.dmm.co.jp/digital/video/h_1416ad00524/h_1416ad00524jp-3.jpg
 
 ```
 
+过滤log文件记录的ERROR
+```
+cat auto_start.sh.log | grep -A 5 -B 5  ERROR
+```
+大概能够得到sample image下载失败的链接和压缩包名
+
+
+
+
+
+
 
