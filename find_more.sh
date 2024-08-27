@@ -13,7 +13,7 @@ SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
 
 #临时保存的页面内含有的可提取链接
-list=`find . -maxdepth 1 -type f -name "*.html" -o -name "*.htm" | xargs -d '\n' grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u`
+lists=`find . -maxdepth 1 -type f -name "*.html" -o -name "*.htm" | xargs -d '\n' grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u`
 
 
 #已经保存的页面
@@ -23,7 +23,7 @@ source ./update_av_db.sh
 
 #已经准备好要保存的页面链接，可能包括也可能不包括已经保存的页面
 if [ -e todo.list ]; then
-    cat todo.list | sort -u >> input.list
+    cat todo.list | sed 's/[a-z]/\U&/g' | sort -u >> input.list
     rm todo.list
 fi
 
@@ -63,7 +63,7 @@ done
 
 touch input.list
 for i in ${todo2[@]}; do echo $i>>input.list; done
-cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> input.list.new
+cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sed 's/[a-z]/\U&/g' | sort -u >> input.list.new
 mv input.list{.new,}
 
 

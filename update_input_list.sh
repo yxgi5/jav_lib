@@ -10,7 +10,7 @@ fi
 if [ ! -e input.list ]; then
         touch input.list
     else
-        cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> input.list.new
+        cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sed 's/[a-z]/\U&/g' | sort -u >> input.list.new
         mv input.list{.new,}
 fi
 
@@ -24,7 +24,7 @@ if [ -e tmp.* ]
 fi
 
 # 只提取当前目录已有 *.tar.gz 的 basename，其实就是车牌
-find . -maxdepth 1 -type f -name "*.tar.gz" | sed '/^$/d' | sed -e 's/\s.*$//' | sed -e 's/.\///' | sed -e 's/.tar.gz$//' | sed -e 's/^[\.].*$//' | sed -e 's/save_page_tools//' | sed -e 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' >> av.list
+find . -maxdepth 1 -type f -name "*.tar.gz" | sed '/^$/d' | sed -e 's/\s.*$//' | sed -e 's/.\///' | sed -e 's/.tar.gz$//' | sed -e 's/^[\.].*$//' | sed -e 's/save_page_tools//' | sed -e 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[a-z]/\U&/g' | sort -u >> av.list
 source ./update_av_db.sh
 
 
@@ -68,7 +68,7 @@ done
 rm input.list
 touch input.list
 for i in ${todo2[@]}; do echo $i>>input.list; done
-cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> input.list.new
+cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sed 's/[a-z]/\U&/g' | sort -u >> input.list.new
 mv input.list{.new,}
 
 

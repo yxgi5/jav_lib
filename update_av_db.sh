@@ -1,9 +1,9 @@
 #!/bin/bash
 if [ -e av.db ]; then
     echo -e ".output db_tmp.txt\nselect * from files;\n.exit" | sqlite3 av.db
-    cat db_tmp.txt >> av.list && rm db_tmp.txt
+    cat db_tmp.txt | sed 's/[a-z]/\U&/g' >> av.list && rm db_tmp.txt
 fi
-sort -u av.list > av.list.new && mv av.list{.new,}
+cat av.list | sed 's/[a-z]/\U&/g' | sort -u > av.list.new && mv av.list{.new,}
 sqlite3 av.db <<EOF
 drop table if exists files;
 CREATE TABLE files (files TEXT);

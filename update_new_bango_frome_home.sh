@@ -26,7 +26,7 @@ do
         $i \
     | tee -a navigation_download.log
     if [ -e $file_name ];then
-        bango_list=`cat $file_name | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u`
+        bango_list=`cat $file_name | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sed 's/[a-z]/\U&/g' | sort -u`
     fi
     
     # 从input.list逐行对比总库中是否有车牌，没有就添加到todo这个列表里面
@@ -69,7 +69,7 @@ do
             # rm input.list
             touch input.list
             for i in ${todo2[@]}; do echo $i>>input.list; done
-            cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sort -u >> input.list.new
+            cat input.list | sed '/^$/d' | sed 's/^.$//g' | sed 's/[ \t]*$//g' | sed 's/^[ \t]*//g' | sed '/^[ \t]*$/d' | sed 's/[\<\>]*//g' | sed 's/https\:\/\/www.javbus.com\/ja\///g' | sed 's/[a-z]/\U&/g' | sort -u >> input.list.new
             mv input.list{.new,}
             next=`cat $file_name | grep 下一頁 | sed -e 's/^.*href=\"\(.*\)".*$/https:\/\/www.javbus.com\1/'`
             rm $file_name
@@ -94,7 +94,7 @@ do
             | tee -a navigation_download.log
             file_name=`echo $next | sed -e 's/^.*\/\(.*\/.*\)$/\1/' | sed -e 's/\//_/'`.html
             if [ -e $file_name ];then
-                bango_list=`cat $file_name | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sort -u`
+                bango_list=`cat $file_name | grep https://www.javbus.com/ja/ | sed 's/\"/\n/g' | sed 's/\ /\n/g' | sed 's/\#/\n/g'| sed 's/)/\n/g'| grep https://www.javbus.com/ja | sed 's/driver-verify.*$//' | sed 's/\#$//g' | grep - | sed 's/\//\n/g' | grep - | sed 's/[a-z]/\U&/g' | sort -u`
             fi
             
             # 从input.list逐行对比总库中是否有车牌，没有就添加到todo这个列表里面

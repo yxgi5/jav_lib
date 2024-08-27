@@ -62,7 +62,7 @@ do
         tar -zcvpf `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`.tar.gz `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`
         rm -rf `echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///'`
     fi
-    echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///' >> av.list
+    echo $names | sed -e 's/\s.*$//' | sed -e 's/.\///' | sed 's/[a-z]/\U&/g' >> av.list
 done
 #IFS=$SAVEIFS
 
