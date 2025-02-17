@@ -276,17 +276,26 @@ https://pics.dmm.co.jp/digital/video/h_1416ad00524/h_1416ad00524jp-3.jpg
 
 ```
 
-过滤log文件记录的ERROR
+# 增量式常规操作
+
+## input.list 列表过滤新车牌并下载sample图和页面(包含magnets)
+```
+./auto_start.sh | tee -a auto_start.sh.log && ./move_tarballs.sh
+```
+
+## 过滤log文件记录的ERROR
 ```
 cat auto_start.sh.log | grep -a -A 10 -B 10 ERROR
 ```
 大概能够得到sample image下载失败的链接和压缩包名
 
-处理完毕后清除log文件
+
+## 处理完毕后清除log文件
 ```
 echo '' > auto_start.sh.log
 ```
 
-
-
-
+## 强制从 input.list 列表下载
+```
+./force_auto_start.sh | tee -a auto_start.sh.log
+```
