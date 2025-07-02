@@ -33,8 +33,10 @@ headers = {
 };
 
 proxies = {
-  "http": "http://127.0.0.1:8118",
-  "https": "http://127.0.0.1:8118",
+#  "http": "http://127.0.0.1:8118",
+#  "https": "http://127.0.0.1:8118",
+  "http": "http://127.0.0.1:10809",
+  "https": "http://127.0.0.1:10809",
 }
 
 def getAjax(avid):
@@ -74,7 +76,8 @@ def getAjax(avid):
 
     html = response.content
     # soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'html.parser')
-    soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'lxml')
+    # soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'lxml')
+    soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'html5lib')
     html = soup.prettify()
     html = html.replace("<div id=\"movie-loading\">","<div id=\"movie-loading\" style=\"display: none;\">")
     # print(html)
@@ -260,7 +263,8 @@ def javbus(avid):
 
     html = response.content
     # soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'html.parser')
-    soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'lxml')
+    # soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'lxml')
+    soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'html5lib')
     html = soup.prettify()
 
     html = "\n".join(html.split('\n')[2:])
@@ -306,7 +310,7 @@ def javbus(avid):
 
     # os.system('aria2c -d ' + avid + ' -j 10 -x 2 -i ' + avid + '/' + avid +".txt " + '--header \'sec-ch-ua: \"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\' --header \'sec-ch-ua-mobile: ?0\' --header \'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\' --header \'sec-ch-ua-platform: \"Linux\"\' --header \'Referer: https://www.javbus.com/ja/' + avid + '\' ' + ' | tee ' + avid + '/' + avid + '_tee.log' )
     #os.system('aria2c -d ' + avid + ' -i ' + avid + '/' + avid +".txt " + '--header \'sec-ch-ua: \"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\' --header \'sec-ch-ua-mobile: ?0\' --header \'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\' --header \'sec-ch-ua-platform: \"Linux\"\' --header \'Referer: https://www.javbus.com/ja/' + avid + '\' ' + ' | tee ' + avid + '/' + avid + '_tee.log' )
-    os.system('aria2c -d ' + avid + ' -i ' + avid + '/' + avid +".txt " + '--header \'sec-ch-ua: \"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\' --header \'sec-ch-ua-mobile: ?0\' --header \'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\' --header \'sec-ch-ua-platform: \"Linux\"\' --header \'Referer: https://www.javbus.com/ja/ --all-proxy=\"http://127.0.0.1:8118\"'  + avid + '\' ' + ' | tee ' + avid + '/' + avid + '_tee.log' )
+    os.system('aria2c -d ' + avid + ' -i ' + avid + '/' + avid +".txt " + '--header \'sec-ch-ua: \"Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"\' --header \'sec-ch-ua-mobile: ?0\' --header \'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36\' --header \'sec-ch-ua-platform: \"Linux\"\' --header \'Referer: https://www.javbus.com/ja/ --all-proxy=\"http://127.0.0.1:10809\"'  + avid + '\' ' + ' | tee ' + avid + '/' + avid + '_tee.log' )
     os.system('rm '+ avid + '/now_printing*')
     with tarfile.open(avid + '.tar.gz', 'w:gz') as tar:
         tar.add(avid)
