@@ -74,7 +74,8 @@ def getAjax(avid):
 
     html = response.content
     # soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'html.parser')
-    soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'lxml')
+    # soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'lxml')
+    soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'html5lib')
     html = soup.prettify()
     html = html.replace("<div id=\"movie-loading\">","<div id=\"movie-loading\" style=\"display: none;\">")
     # print(html)
@@ -260,7 +261,8 @@ def javbus(avid):
 
     html = response.content
     # soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'html.parser')
-    soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'lxml')
+    # soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'lxml')
+    soup = BeautifulSoup(html.decode('utf-8', errors='ignore'), 'html5lib')
     html = soup.prettify()
 
     html = "\n".join(html.split('\n')[2:])
