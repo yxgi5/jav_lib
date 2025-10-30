@@ -8,6 +8,7 @@ import sys
 import tarfile
 import requests
 import re
+import platform
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
@@ -32,10 +33,26 @@ headers = {
     'X-Requested-With': 'XMLHttpRequest',
 };
 
-proxies = {
-  "http": "http://127.0.0.1:8118",
-  "https": "http://127.0.0.1:8118",
-}
+if platform.system().lower().startswith("msys"):
+    proxies = {
+      "http": "http://127.0.0.1:10809",
+      "https": "http://127.0.0.1:10809",
+    }
+elif platform.system().lower().startswith("cygwin"):
+    proxies = {
+      "http": "http://127.0.0.1:10809",
+      "https": "http://127.0.0.1:10809",
+    }
+elif platform.system().lower().startswith("windows"):
+    proxies = {
+      "http": "http://127.0.0.1:10809",
+      "https": "http://127.0.0.1:10809",
+    }
+else:
+    proxies = {
+      "http": "http://127.0.0.1:8118",
+      "https": "http://127.0.0.1:8118",
+    }
 
 def getAjax(avid):
     '''获取javbus的ajax'''
